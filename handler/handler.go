@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"errors"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/michaelgbenle/WalletApi/database"
@@ -62,10 +61,7 @@ func (h *Handler) DebitWallet(c *gin.Context) {
 
 	transaction, debitErr := h.DB.Debitwallet(debit)
 
-	if errors.New("insufficient funds") == debitErr {
-		c.IndentedJSON(http.StatusBadRequest, gin.H{"error": "insufficient funds"})
-		return
-	} else if debitErr != nil {
+	if debitErr != nil {
 		c.IndentedJSON(http.StatusBadRequest, gin.H{"error": "unable to debit wallet"})
 		return
 	}
