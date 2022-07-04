@@ -48,7 +48,7 @@ func (h *Handler) DebitWallet(c *gin.Context) {
 		c.IndentedJSON(http.StatusBadRequest, gin.H{"error": "unable to debit wallet"})
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"message": "wallet credited successfully"})
+	c.JSON(http.StatusOK, gin.H{"message": "wallet debited successfully"})
 
 }
 func (h *Handler) GetTransaction(c *gin.Context) {
