@@ -37,7 +37,7 @@ func (h *Handler) CreditWallet(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{
-		"message": "wallet credited successfully",
+		"message":     "wallet credited successfully",
 		"transaction": transaction,
 	})
 
@@ -48,7 +48,8 @@ func (h *Handler) DebitWallet(c *gin.Context) {
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": "unable to bind json"})
 		return
 	}
-	 transaction, DebitErr := h.DB.Debitwallet(debit).Error; DebitErr != nil {
+	transaction, DebitErr := h.DB.Debitwallet(debit)
+	if DebitErr != nil {
 		c.IndentedJSON(http.StatusBadRequest, gin.H{"error": "unable to debit wallet"})
 		return
 	}
