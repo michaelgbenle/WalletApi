@@ -3,6 +3,7 @@ package server
 import (
 	"github.com/michaelgbenle/WalletApi/database"
 	"github.com/michaelgbenle/WalletApi/handler"
+	"github.com/michaelgbenle/WalletApi/router"
 	"log"
 )
 
