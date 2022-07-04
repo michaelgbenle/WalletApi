@@ -59,12 +59,12 @@ func (pdb *PostgresDb) Creditwallet(money *models.Money) (*models.Transaction, e
 		Error; err != nil {
 		return nil, err
 	}
-	if err := pdb.DB.Model(transaction).Where("accountNos=?", accountNos).
+	if err := pdb.DB.Model(transaction).Where("CustomerId=?", user.ID).
 		Update("success", true).
 		Error; err != nil {
 		return nil, err
 	}
-	transaction.Success = true
+
 	return transaction, nil
 }
 func (pdb *PostgresDb) Debitwallet(money *models.Money) (*models.Transaction, error) {
