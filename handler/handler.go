@@ -14,7 +14,7 @@ type Handler struct {
 func (h *Handler) AddCustomer(c *gin.Context) {
 	customer := &models.Customer{}
 	if err := c.ShouldBindJSON(customer).Error; err != nil {
-		c.IndentedJSON()
+		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": "unable to bind json"})
 	}
 }
 
