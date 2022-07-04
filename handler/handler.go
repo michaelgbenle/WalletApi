@@ -73,8 +73,8 @@ func (h *Handler) DebitWallet(c *gin.Context) {
 
 }
 func (h *Handler) GetTransaction(c *gin.Context) {
-	accountNos := c.Query("accountNos")
-	transactions, err := h.DB.Gettransaction(accountNos)
+	id := c.Query("id")
+	transactions, err := h.DB.Gettransaction(id)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"message": "transaction not found",
