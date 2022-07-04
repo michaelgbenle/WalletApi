@@ -9,7 +9,7 @@ import (
 
 type DB interface {
 	Getcustomer(accountNos string) (*models.Customer, error)
-	Addcustomer(customer *models.Customer) error
+	Addcustomer(customer models.Customer) error
 	Creditwallet(money *models.Money) (*models.Transaction, error)
 	Debitwallet(money *models.Money) (*models.Transaction, error)
 	Gettransaction(id string) (*[]models.Transaction, error)

@@ -37,13 +37,6 @@ func (pdb *PostgresDb) Getcustomer(accountNos string) (*models.Customer, error) 
 	return customer, nil
 }
 
-func (pdb *PostgresDb) Addcustomer(customer *models.Customer) error {
-	customer.Balance = 0
-	if err := pdb.DB.Create(&customer).Error; err != nil {
-		return err
-	}
-	return nil
-}
 func (pdb *PostgresDb) Creditwallet(money *models.Money) (*models.Transaction, error) {
 	accountNos, amount := money.AccountNos, money.Amount
 	user, _ := pdb.Getcustomer(accountNos)
@@ -108,4 +101,12 @@ func (pdb *PostgresDb) Gettransaction(id string) (*[]models.Transaction, error) 
 		return nil, err
 	}
 	return transactions, nil
+}
+
+func (pdb *PostgresDb) Addcustomer(customer models.Customer) error {
+	customer.Balance = 0
+	if err := pdb.DB.Create(&customer).Error; err != nil {
+		return err
+	}
+	return nil
 }
