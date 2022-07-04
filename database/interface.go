@@ -9,6 +9,7 @@ import (
 
 type DB interface {
 	Getcustomer(id string) (*models.Customer, error)
+	Addcustomer(user *models.Customer) error
 }
 
 type DbParameters struct {
