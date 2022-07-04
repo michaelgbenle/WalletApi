@@ -31,7 +31,7 @@ func (pdb *PostgresDb) SetupDb(host, user, password, dbName, port string) error 
 
 func (pdb *PostgresDb) Getcustomer(accountNos string) (*models.Customer, error) {
 	var customer *models.Customer
-	if err := pdb.DB.Where("accountNos=?", accountNos).First(customer).Error; err != nil {
+	if err := pdb.DB.Where("account_nos=?", accountNos).First(&customer).Error; err != nil {
 		return nil, err
 	}
 	return customer, nil

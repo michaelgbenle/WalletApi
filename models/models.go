@@ -5,7 +5,7 @@ import "gorm.io/gorm"
 type Customer struct {
 	gorm.Model
 	Name       string `json:"name"`
-	AccountNos string `json:"accountNos"`
+	AccountNos string `gorm:"unique",json:"accountNos"`
 	Balance    uint   `json:"balance"`
 }
 

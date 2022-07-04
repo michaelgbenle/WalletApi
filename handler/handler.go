@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/michaelgbenle/WalletApi/database"
 	"github.com/michaelgbenle/WalletApi/models"
@@ -16,6 +17,7 @@ func (h *Handler) GetCustomer(c *gin.Context) {
 	accountNos := c.Query("accountNos")
 	if len(accountNos) < 10 {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "account number should be 10 digits"})
+		return
 	}
 	customer, err := h.DB.Getcustomer(accountNos)
 	if err != nil {
@@ -31,7 +33,7 @@ func (h *Handler) GetCustomer(c *gin.Context) {
 
 func (h *Handler) CreditWallet(c *gin.Context) {
 	credit := &models.Money{}
-	if err := c.ShouldBindJSON(credit).Error; err != nil {
+	if err := c.ShouldBindJSON(credit); err != nil {
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": "unable to bind json"})
 		return
 	}
@@ -52,7 +54,7 @@ func (h *Handler) CreditWallet(c *gin.Context) {
 }
 func (h *Handler) DebitWallet(c *gin.Context) {
 	debit := &models.Money{}
-	if err := c.ShouldBindJSON(debit).Error; err != nil {
+	if err := c.ShouldBindJSON(debit); err != nil {
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": "unable to bind json"})
 		return
 	}
@@ -83,19 +85,24 @@ func (h *Handler) GetTransaction(c *gin.Context) {
 
 }
 func (h *Handler) AddCustomer(c *gin.Context) {
-	var customer models.Customer
+	var customer *models.Customer
 	log.Println(customer)
 	err := c.ShouldBindJSON(&customer)
 	if err != nil {
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": "unable to bind json"})
 		return
 	}
-	if _, userErr := h.DB.Getcustomer(customer.AccountNos); userErr == nil {
+	fmt.Println("test 2")
+	fmt.Println(customer)
+	if user, userErr := h.DB.Getcustomer(customer.AccountNos); userErr == nil {
+		fmt.Println("this is ", user)
+		fmt.Println("our ", userErr)
 		c.JSON(http.StatusBadRequest, gin.H{"error": "customer exists"})
+		return
 	}
-	if CreateErr := h.DB.Addcustomer(customer); CreateErr != nil {
-		c.IndentedJSON(http.StatusBadRequest, gin.H{"error": "unable to create customer"})
 
+	if CreateErr := h.DB.Addcustomer(*customer); CreateErr != nil {
+		c.IndentedJSON(http.StatusBadRequest, gin.H{"error": "unable to create customer"})
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{"message": "Customer added successfully"})
