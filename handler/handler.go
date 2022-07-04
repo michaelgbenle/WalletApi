@@ -26,7 +26,7 @@ func (h *Handler) GetCustomer(c *gin.Context) {
 }
 
 func (h *Handler) CreditWallet(c *gin.Context) {
-	credit := &models.Credit{}
+	credit := &models.Money{}
 	if err := c.ShouldBindJSON(credit).Error; err != nil {
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": "unable to bind json"})
 		return
