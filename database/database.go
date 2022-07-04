@@ -20,7 +20,7 @@ func (pdb *PostgresDb) SetupDb(host, user, password, dbName, port string) error 
 	}
 	pdb.DB = db
 
-	dberr := pdb.DB.AutoMigrate(&models.Customer{})
+	dberr := pdb.DB.AutoMigrate(&models.Customer{}, models.Transaction{})
 	if dberr != nil {
 		log.Fatal(dberr)
 	}
