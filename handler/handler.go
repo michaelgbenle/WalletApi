@@ -16,6 +16,7 @@ func (h *Handler) AddCustomer(c *gin.Context) {
 	if err := c.ShouldBindJSON(customer).Error; err != nil {
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": "unable to bind json"})
 	}
+	if CreateErr:= h.DB.Addcustomer(customer)
 }
 
 func (h *Handler) GetCustomer(c *gin.Context) {
