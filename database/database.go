@@ -36,6 +36,7 @@ func (pdb *PostgresDb) Getcustomer(id string) (*models.Customer, error) {
 }
 
 func (pdb *PostgresDb) Addcustomer(customer *models.Customer) error {
+	customer.Balance = 0
 	if err := pdb.DB.Create(&customer).Error; err != nil {
 		return err
 	}

@@ -24,15 +24,14 @@ func (h *Handler) GetCustomer(c *gin.Context) {
 		"message": customer,
 	})
 }
-func (h *Handler) GetTransaction(c *gin.Context) {
-
-}
 
 func (h *Handler) CreditWallet(c *gin.Context) {
-	//id := c.Query("id")
 
 }
 func (h *Handler) DebitWallet(c *gin.Context) {
+
+}
+func (h *Handler) GetTransaction(c *gin.Context) {
 
 }
 func (h *Handler) AddCustomer(c *gin.Context) {
