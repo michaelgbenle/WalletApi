@@ -27,6 +27,15 @@ func (h *Handler) GetCustomer(c *gin.Context) {
 
 func (h *Handler) CreditWallet(c *gin.Context) {
 	credit := &models.Credit{}
+	if err := c.ShouldBindJSON(credit).Error; err != nil {
+		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": "unable to bind json"})
+		return
+	}
+	if CreateErr := h.DB.Creditwallet(credit).Error; CreateErr != nil {
+		c.IndentedJSON(http.StatusBadRequest, gin.H{"error": "unable to create customer"})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"message": "wallet credited successfully"})
 
 }
 func (h *Handler) DebitWallet(c *gin.Context) {
