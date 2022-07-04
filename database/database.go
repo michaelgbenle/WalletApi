@@ -43,14 +43,13 @@ func (pdb *PostgresDb) Addcustomer(customer *models.Customer) error {
 	return nil
 }
 func (pdb *PostgresDb) Creditwallet(money *models.Money) (*models.Transaction, error) {
-	accountNos, amount:= money.AccountNos,money.Amount
+	accountNos, amount := money.AccountNos, money.Amount
 
-	user,_:= pdb.Getcustomer(accountNos)
+	user, _ := pdb.Getcustomer(accountNos)
 
-	if err:= pdb.DB.Where("accountNos =?", accountNos).First(&user).Error; err != nil {
-	return nil, err
+	if err := pdb.DB.Model(user).Where("accountNos=?", accountNos).Update("balance", user.Balance+amount).Error; err != nil {
+		return nil, err
 	}
-	pdb.DB.Model(user).
 	return nil, nil
 }
 func (pdb *PostgresDb) Debitwallet(money *models.Money) (*models.Transaction, error) {
