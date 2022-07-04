@@ -32,10 +32,10 @@ func (h *Handler) CreditWallet(c *gin.Context) {
 		return
 	}
 	if len(credit.AccountNos) < 10 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "incomplete account number"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "account number should be 10 digits"})
 	}
-	money := credit.Amount
-	transaction, CreditErr := h.DB.Creditwallet(money)
+
+	transaction, CreditErr := h.DB.Creditwallet(credit)
 	if CreditErr != nil {
 		c.IndentedJSON(http.StatusBadRequest, gin.H{"error": "unable to credit wallet"})
 		return
@@ -52,8 +52,8 @@ func (h *Handler) DebitWallet(c *gin.Context) {
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": "unable to bind json"})
 		return
 	}
-	money := debit.Amount
-	transaction, DebitErr := h.DB.Debitwallet(money)
+
+	transaction, DebitErr := h.DB.Debitwallet(debit)
 	if DebitErr != nil {
 		c.IndentedJSON(http.StatusBadRequest, gin.H{"error": "unable to debit wallet"})
 		return

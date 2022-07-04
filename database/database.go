@@ -43,7 +43,7 @@ func (pdb *PostgresDb) Addcustomer(customer *models.Customer) error {
 	return nil
 }
 func (pdb *PostgresDb) Creditwallet(money uint) (*models.Transaction, error) {
-
+pdb.DB.
 	return nil, nil
 }
 func (pdb *PostgresDb) Debitwallet(money uint) (*models.Transaction, error) {
