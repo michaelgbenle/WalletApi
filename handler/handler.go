@@ -11,20 +11,6 @@ type Handler struct {
 	DB database.DB
 }
 
-func (h *Handler) AddCustomer(c *gin.Context) {
-	customer := &models.Customer{}
-	if err := c.ShouldBindJSON(customer).Error; err != nil {
-		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": "unable to bind json"})
-		return
-	}
-	if CreateErr := h.DB.Addcustomer(customer).Error; CreateErr != nil {
-		c.IndentedJSON(http.StatusBadRequest, gin.H{"error": "unable to create customer"})
-		return
-	}
-	c.JSON(http.StatusOK, gin.H{"message": "Customer added successfully"})
-
-}
-
 func (h *Handler) GetCustomer(c *gin.Context) {
 	id := c.Query("id")
 	customer, err := h.DB.Getcustomer(id)
@@ -47,5 +33,18 @@ func (h *Handler) CreditWallet(c *gin.Context) {
 
 }
 func (h *Handler) DebitWallet(c *gin.Context) {
+
+}
+func (h *Handler) AddCustomer(c *gin.Context) {
+	customer := &models.Customer{}
+	if err := c.ShouldBindJSON(customer).Error; err != nil {
+		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": "unable to bind json"})
+		return
+	}
+	if CreateErr := h.DB.Addcustomer(customer).Error; CreateErr != nil {
+		c.IndentedJSON(http.StatusBadRequest, gin.H{"error": "unable to create customer"})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"message": "Customer added successfully"})
 
 }
