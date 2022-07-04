@@ -12,6 +12,7 @@ func SetupRouter(h *handler.Handler) (*gin.Engine, string) {
 	router.GET("/transaction", h.GetTransaction)
 	router.PATCH("/credit", h.CreditWallet)
 	router.PATCH("/return", h.DebitWallet)
+	router.POST("/return", h.DebitWallet)
 
 	port := os.Getenv("PORT")
 
