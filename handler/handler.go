@@ -61,7 +61,7 @@ func (h *Handler) DebitWallet(c *gin.Context) {
 }
 func (h *Handler) GetTransaction(c *gin.Context) {
 	id := c.Query("id")
-	transaction, err := h.DB.Gettransaction(id)
+	transactions, err := h.DB.Gettransaction(id)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"message": "transaction not found",
@@ -69,7 +69,7 @@ func (h *Handler) GetTransaction(c *gin.Context) {
 		return
 	}
 	c.IndentedJSON(http.StatusOK, gin.H{
-		"message": transaction,
+		"message": transactions,
 	})
 
 }

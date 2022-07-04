@@ -48,6 +48,10 @@ func (pdb *PostgresDb) Creditwallet(money *models.Money) (*models.Transaction, e
 func (pdb *PostgresDb) Debitwallet(money *models.Money) (*models.Transaction, error) {
 	return nil, nil
 }
-func (pdb *PostgresDb) Gettransaction(id string) (*models.Transaction, error) {
-	return nil, nil
+func (pdb *PostgresDb) Gettransaction(id string) (*[]models.Transaction, error) {
+	var transactions *[]models.Transaction
+	if err := pdb.DB.Where("id=?", id).Find(transactions).Error; err != nil {
+		return nil, err
+	}
+	return transactions, nil
 }
