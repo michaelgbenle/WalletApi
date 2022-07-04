@@ -1,6 +1,7 @@
 package database
 
 import (
+	"errors"
 	"fmt"
 	"github.com/michaelgbenle/WalletApi/models"
 	"gorm.io/driver/postgres"
@@ -78,6 +79,9 @@ func (pdb *PostgresDb) Debitwallet(money *models.Money) (*models.Transaction, er
 	if err := pdb.DB.Create(&transaction).Error; err != nil {
 		return nil, err
 	}
+	if user.Balance < amount {
+		return nil, errors.New("insufficient funds")
+	}
 
 	if err := pdb.DB.Model(user).Where("accountNos=?", accountNos).
 		Update("balance", user.Balance-amount).
@@ -89,7 +93,7 @@ func (pdb *PostgresDb) Debitwallet(money *models.Money) (*models.Transaction, er
 		Error; err != nil {
 		return nil, err
 	}
-	//transaction.Success = true
+
 	return transaction, nil
 }
 func (pdb *PostgresDb) Gettransaction(id string) (*[]models.Transaction, error) {
