@@ -104,10 +104,6 @@ func (pdb *PostgresDb) Gettransaction(id string) (*[]models.Transaction, error) 
 }
 
 func (pdb *PostgresDb) Addcustomer(customer models.Customer) error {
-	user, _ := pdb.Getcustomer(customer.AccountNos)
-	if user == nil {
-		return errors.New("customer exists")
-	}
 	customer.Balance = 0
 	if err := pdb.DB.Create(&customer).Error; err != nil {
 		return err

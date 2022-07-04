@@ -90,8 +90,12 @@ func (h *Handler) AddCustomer(c *gin.Context) {
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": "unable to bind json"})
 		return
 	}
+	if _, userErr := h.DB.Getcustomer(customer.AccountNos); userErr == nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "customer exists"})
+	}
 	if CreateErr := h.DB.Addcustomer(customer); CreateErr != nil {
 		c.IndentedJSON(http.StatusBadRequest, gin.H{"error": "unable to create customer"})
+
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{"message": "Customer added successfully"})
