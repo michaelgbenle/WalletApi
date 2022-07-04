@@ -10,6 +10,7 @@ import (
 type DB interface {
 	Getcustomer(id string) (*models.Customer, error)
 	Addcustomer(customer *models.Customer) error
+	Creditwallet(money models.Money) error
 }
 
 type DbParameters struct {
