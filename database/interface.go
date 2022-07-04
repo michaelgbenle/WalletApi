@@ -2,11 +2,13 @@ package database
 
 import (
 	"github.com/joho/godotenv"
+	"github.com/michaelgbenle/WalletApi/models"
 	"log"
 	"os"
 )
 
 type DB interface {
+	Wallet(id string) (*models.Wallet, error)
 }
 
 type DbParameters struct {
@@ -36,4 +38,3 @@ func InitializeDbParameters() DbParameters {
 		Port:     port,
 	}
 }
-
