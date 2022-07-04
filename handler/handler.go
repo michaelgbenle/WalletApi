@@ -21,7 +21,7 @@ func (h *Handler) AddCustomer(c *gin.Context) {
 		c.IndentedJSON(http.StatusBadRequest, gin.H{"error": "unable to create customer"})
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"message": "Customer added successful"})
+	c.JSON(http.StatusOK, gin.H{"message": "Customer added successfully"})
 
 }
 
