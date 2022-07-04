@@ -80,6 +80,7 @@ func (pdb *PostgresDb) Debitwallet(money *models.Money) (*models.Transaction, er
 		return nil, err
 	}
 	if user.Balance < amount {
+		log.Println(errors.New("insufficient funds"))
 		return nil, errors.New("insufficient funds")
 	}
 

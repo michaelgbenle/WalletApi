@@ -60,11 +60,12 @@ func (h *Handler) DebitWallet(c *gin.Context) {
 		return
 	}
 
-	transaction, DebitErr := h.DB.Debitwallet(debit)
-	if DebitErr == errors.New("insufficient funds") {
+	transaction, debitErr := h.DB.Debitwallet(debit)
+
+	if errors.New("insufficient funds") == debitErr {
 		c.IndentedJSON(http.StatusBadRequest, gin.H{"error": "insufficient funds"})
 		return
-	} else if DebitErr != nil {
+	} else if debitErr != nil {
 		c.IndentedJSON(http.StatusBadRequest, gin.H{"error": "unable to debit wallet"})
 		return
 	}
