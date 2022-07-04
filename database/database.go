@@ -64,10 +64,11 @@ func (pdb *PostgresDb) Creditwallet(money *models.Money) (*models.Transaction, e
 		Error; err != nil {
 		return nil, err
 	}
-
+	//transaction.Success = true
 	return transaction, nil
 }
 func (pdb *PostgresDb) Debitwallet(money *models.Money) (*models.Transaction, error) {
+
 	return nil, nil
 }
 func (pdb *PostgresDb) Gettransaction(id string) (*[]models.Transaction, error) {
