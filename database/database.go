@@ -2,6 +2,7 @@ package database
 
 import (
 	"fmt"
+	"github.com/michaelgbenle/WalletApi/models"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"log"
