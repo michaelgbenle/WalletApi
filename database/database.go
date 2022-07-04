@@ -68,8 +68,29 @@ func (pdb *PostgresDb) Creditwallet(money *models.Money) (*models.Transaction, e
 	return transaction, nil
 }
 func (pdb *PostgresDb) Debitwallet(money *models.Money) (*models.Transaction, error) {
+	accountNos, amount := money.AccountNos, money.Amount
+	user, _ := pdb.Getcustomer(accountNos)
+	transaction := &models.Transaction{
+		CustomerId: user.ID,
+		Type:       "debit",
+		Success:    false,
+	}
+	if err := pdb.DB.Create(&transaction).Error; err != nil {
+		return nil, err
+	}
 
-	return nil, nil
+	if err := pdb.DB.Model(user).Where("accountNos=?", accountNos).
+		Update("balance", user.Balance-amount).
+		Error; err != nil {
+		return nil, err
+	}
+	if err := pdb.DB.Model(transaction).Where("CustomerId=?", user.ID).
+		Update("success", true).
+		Error; err != nil {
+		return nil, err
+	}
+	//transaction.Success = true
+	return transaction, nil
 }
 func (pdb *PostgresDb) Gettransaction(id string) (*[]models.Transaction, error) {
 	var transactions *[]models.Transaction
