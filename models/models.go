@@ -11,6 +11,6 @@ type Customer struct {
 type Transaction struct {
 	gorm.Model
 	CustomerId string `gorm:"foreignKey" json:"customer_id"`
-	Type       string
-	Success    bool `json:"success"`
+	Type       string `json:"type"`
+	Success    bool   `json:"success"`
 }
