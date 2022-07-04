@@ -32,7 +32,7 @@ func (h *Handler) CreditWallet(c *gin.Context) {
 		return
 	}
 	if CreateErr := h.DB.Creditwallet(credit).Error; CreateErr != nil {
-		c.IndentedJSON(http.StatusBadRequest, gin.H{"error": "unable to create customer"})
+		c.IndentedJSON(http.StatusBadRequest, gin.H{"error": "unable to credit wallet"})
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{"message": "wallet credited successfully"})
