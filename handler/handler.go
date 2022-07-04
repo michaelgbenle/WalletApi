@@ -39,6 +39,11 @@ func (h *Handler) CreditWallet(c *gin.Context) {
 
 }
 func (h *Handler) DebitWallet(c *gin.Context) {
+	debit := &models.Money{}
+	if err := c.ShouldBindJSON(debit).Error; err != nil {
+		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": "unable to bind json"})
+		return
+	}
 
 }
 func (h *Handler) GetTransaction(c *gin.Context) {
