@@ -26,6 +26,7 @@ func (h *Handler) GetCustomer(c *gin.Context) {
 }
 
 func (h *Handler) CreditWallet(c *gin.Context) {
+	credit := &models.Credit{}
 
 }
 func (h *Handler) DebitWallet(c *gin.Context) {
