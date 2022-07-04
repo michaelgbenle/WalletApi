@@ -10,6 +10,8 @@ type Handler struct {
 	DB database.DB
 }
 
+func (h *Handler) AddCustomer(c *gin.Context)
+
 func (h *Handler) GetCustomer(c *gin.Context) {
 	id := c.Query("id")
 	customer, err := h.DB.Getcustomer(id)
