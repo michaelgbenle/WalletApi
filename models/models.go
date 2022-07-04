@@ -4,8 +4,9 @@ import "gorm.io/gorm"
 
 type Customer struct {
 	gorm.Model
-	Name    string `json:"name"`
-	Balance uint   `json:"balance"`
+	Name       string `json:"name"`
+	AccountNos string `json:"accountNos"`
+	Balance    uint   `json:"balance"`
 }
 
 type Transaction struct {
@@ -16,5 +17,6 @@ type Transaction struct {
 }
 
 type Money struct {
-	Amount uint
+	AccountNos string
+	Amount     uint
 }
