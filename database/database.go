@@ -6,7 +6,6 @@ import (
 	"github.com/michaelgbenle/WalletApi/models"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
-	"gorm.io/gorm/clause"
 	"log"
 )
 
@@ -49,18 +48,22 @@ func (pdb *PostgresDb) Creditwallet(money *models.Money) (*models.Transaction, e
 		return nil, err
 	}
 
-	if err := pdb.DB.Model(user).Where("accountNos=?", accountNos).
+	if err := pdb.DB.Model(user).Where("account_nos=?", accountNos).
 		Update("balance", user.Balance+amount).
 		Error; err != nil {
+		fmt.Println(err)
 		return nil, err
 	}
-	if err := pdb.DB.Model(transaction).Where("CustomerId=?", user.ID).
+	if err := pdb.DB.Model(transaction).Where("Customer_id=?", user.ID).
 		Update("success", true).
 		Error; err != nil {
 		return nil, err
 	}
-	//transaction.Success = true
+
 	return transaction, nil
+}
+func (pdb *PostgresDb) Funds(accountNos string) (bool, error) {
+	return true, nil
 }
 func (pdb *PostgresDb) Debitwallet(money *models.Money) (*models.Transaction, error) {
 	accountNos, amount := money.AccountNos, money.Amount
@@ -76,18 +79,13 @@ func (pdb *PostgresDb) Debitwallet(money *models.Money) (*models.Transaction, er
 	if user.Balance < amount {
 		return nil, errors.New("insufficient funds")
 	}
-	if err := pdb.DB.Clauses(clause.Locking{Strength: "UPDATE"}).Where("accountNos=?", accountNos).
+
+	if err := pdb.DB.Model(user).Where("account_nos=?", accountNos).
 		Update("balance", user.Balance-amount).
 		Error; err != nil {
 		return nil, err
 	}
-
-	//if err := pdb.DB.Model(user).Where("accountNos=?", accountNos).
-	//	Update("balance", user.Balance-amount).
-	//	Error; err != nil {
-	//	return nil, err
-	//}
-	if err := pdb.DB.Model(transaction).Where("CustomerId=?", user.ID).
+	if err := pdb.DB.Model(transaction).Where("Customer_id=?", user.ID).
 		Update("success", true).
 		Error; err != nil {
 		return nil, err
