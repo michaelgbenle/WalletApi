@@ -44,7 +44,6 @@ func (pdb *PostgresDb) Addcustomer(customer *models.Customer) error {
 }
 func (pdb *PostgresDb) Creditwallet(money *models.Money) (*models.Transaction, error) {
 	accountNos, amount := money.AccountNos, money.Amount
-
 	user, _ := pdb.Getcustomer(accountNos)
 
 	if err := pdb.DB.Model(user).Where("accountNos=?", accountNos).Update("balance", user.Balance+amount).Error; err != nil {
