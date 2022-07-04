@@ -10,7 +10,7 @@ type Handler struct {
 	DB database.DB
 }
 
-func (h *Handler) GetWallets(c *gin.Context) {
+func (h *Handler) GetCustomer(c *gin.Context) {
 	id := c.Query("id")
 	customer, err := h.DB.Wallet(id)
 	if err != nil {

@@ -8,7 +8,7 @@ import (
 
 func SetupRouter(h *handler.Handler) (*gin.Engine, string) {
 	router := gin.Default()
-	router.GET("/wallets", h.GetWallets)
+	router.GET("/customer", h.GetCustomer)
 	router.GET("/transaction", h.GetTransaction)
 	router.PATCH("/credit", h.CreditWallet)
 	router.PATCH("/return", h.DebitWallet)
