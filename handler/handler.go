@@ -44,11 +44,14 @@ func (h *Handler) DebitWallet(c *gin.Context) {
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": "unable to bind json"})
 		return
 	}
-	if DebitErr := h.DB.Debitwallet(debit).Error; DebitErr != nil {
+	if transaction, DebitErr := h.DB.Debitwallet(debit).Error; DebitErr != nil {
 		c.IndentedJSON(http.StatusBadRequest, gin.H{"error": "unable to debit wallet"})
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"message": "wallet debited successfully"})
+	c.JSON(http.StatusOK, gin.H{
+		"message":     "wallet debited successfully",
+		"transaction": transaction,
+	})
 
 }
 func (h *Handler) GetTransaction(c *gin.Context) {
