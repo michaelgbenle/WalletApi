@@ -3,6 +3,7 @@ package handler
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/michaelgbenle/WalletApi/database"
+	"github.com/michaelgbenle/WalletApi/models"
 	"net/http"
 )
 
@@ -10,7 +11,10 @@ type Handler struct {
 	DB database.DB
 }
 
-func (h *Handler) AddCustomer(c *gin.Context)
+func (h *Handler) AddCustomer(c *gin.Context){
+	customer:= &models.Customer{}
+	if err:= c.ShouldBindJSON(customer)
+}
 
 func (h *Handler) GetCustomer(c *gin.Context) {
 	id := c.Query("id")
