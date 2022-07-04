@@ -62,9 +62,12 @@ func (pdb *PostgresDb) Creditwallet(money *models.Money) (*models.Transaction, e
 
 	return transaction, nil
 }
-func (pdb *PostgresDb) Funds(accountNos string) (bool, error) {
-	return true, nil
-}
+
+//func (pdb *PostgresDb) Funds(accountNos string) (bool, error) {
+//	user, _ := pdb.Getcustomer(accountNos)
+//	return true, nil
+//}
+
 func (pdb *PostgresDb) Debitwallet(money *models.Money) (*models.Transaction, error) {
 	accountNos, amount := money.AccountNos, money.Amount
 	user, _ := pdb.Getcustomer(accountNos)
