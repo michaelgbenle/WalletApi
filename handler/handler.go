@@ -11,9 +11,11 @@ type Handler struct {
 	DB database.DB
 }
 
-func (h *Handler) AddCustomer(c *gin.Context){
-	customer:= &models.Customer{}
-	if err:= c.ShouldBindJSON(customer)
+func (h *Handler) AddCustomer(c *gin.Context) {
+	customer := &models.Customer{}
+	if err := c.ShouldBindJSON(customer).Error; err != nil {
+		c.IndentedJSON()
+	}
 }
 
 func (h *Handler) GetCustomer(c *gin.Context) {
