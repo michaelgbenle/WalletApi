@@ -15,6 +15,6 @@ type Transaction struct {
 	Success    bool   `json:"success"`
 }
 
-type Credit struct {
+type Money struct {
 	Amount uint
 }
