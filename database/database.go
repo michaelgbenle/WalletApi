@@ -42,3 +42,6 @@ func (pdb *PostgresDb) Addcustomer(customer *models.Customer) error {
 	}
 	return nil
 }
+func (pdb *PostgresDb) Addcustomer(customer *models.Customer) error {}
+func (pdb *PostgresDb) Addcustomer(customer *models.Customer) error {}
+func (pdb *PostgresDb) Addcustomer(customer *models.Customer) error {}
