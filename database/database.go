@@ -20,9 +20,17 @@ func (pdb *PostgresDb) SetupDb(host, user, password, dbName, port string) error 
 	}
 	pdb.DB = db
 
-	dberr := pdb.DB.AutoMigrate(&models.Book{})
+	dberr := pdb.DB.AutoMigrate(&models.Customer{})
 	if dberr != nil {
 		log.Fatal(dberr)
 	}
 	return nil
+}
+
+func (pdb *PostgresDb) wallet(id string) (*models.Wallet, error) {
+	var customer *models.Wallet
+	if err := pdb.DB.Where("id=?", id).First(customer).Error; err != nil {
+		return nil, err
+	}
+	return customer, nil
 }

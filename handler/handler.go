@@ -12,7 +12,7 @@ type Handler struct {
 
 func (h *Handler) GetCustomer(c *gin.Context) {
 	id := c.Query("id")
-	customer, err := h.DB.Wallet(id)
+	customer, err := h.DB.Getcustomer(id)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"message": "user not found",

@@ -8,7 +8,7 @@ import (
 )
 
 type DB interface {
-	Wallet(id string) (*models.Wallet, error)
+	Wallet(id string) (*models.Getcustomer, error)
 }
 
 type DbParameters struct {
