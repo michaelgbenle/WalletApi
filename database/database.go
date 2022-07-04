@@ -81,7 +81,8 @@ func (pdb *PostgresDb) Debitwallet(money *models.Money) (*models.Transaction, er
 	if err := pdb.DB.Create(&transaction).Error; err != nil {
 		return nil, err
 	}
-	if user.Balance < amount {
+	fund := pdb.Funds(accountNos, amount)
+	if fund {
 
 	}
 
