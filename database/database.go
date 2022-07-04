@@ -44,4 +44,4 @@ func (pdb *PostgresDb) Addcustomer(customer *models.Customer) error {
 }
 func (pdb *PostgresDb) Creditwallet(money *models.Money) (models.Transaction, error) {}
 func (pdb *PostgresDb) Debitwallet(money *models.Money) (models.Transaction, error)  {}
-func (pdb *PostgresDb) Addcustomer(customer *models.Customer) error                  {}
+func (pdb *PostgresDb) Gettransaction(id string) (models.Transaction, error)         {}
