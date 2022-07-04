@@ -10,9 +10,9 @@ import (
 type DB interface {
 	Getcustomer(id string) (*models.Customer, error)
 	Addcustomer(customer *models.Customer) error
-	Creditwallet(money *models.Money) (models.Transaction, error)
-	Debitwallet(money *models.Money) (models.Transaction, error)
-	Gettransaction(id string) (models.Transaction, error)
+	Creditwallet(money *models.Money) (*models.Transaction, error)
+	Debitwallet(money *models.Money) (*models.Transaction, error)
+	Gettransaction(id string) (*models.Transaction, error)
 }
 
 type DbParameters struct {
