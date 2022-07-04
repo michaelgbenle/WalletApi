@@ -12,8 +12,11 @@ type Handler struct {
 }
 
 func (h *Handler) GetCustomer(c *gin.Context) {
-	id := c.Query("id")
-	customer, err := h.DB.Getcustomer(id)
+	accountNos := c.Query("accountNos")
+	if len(accountNos) < 10 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "account number should be 10 digits"})
+	}
+	customer, err := h.DB.Getcustomer(accountNos)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"message": "user not found",

@@ -27,9 +27,9 @@ func (pdb *PostgresDb) SetupDb(host, user, password, dbName, port string) error 
 	return nil
 }
 
-func (pdb *PostgresDb) Getcustomer(id string) (*models.Customer, error) {
+func (pdb *PostgresDb) Getcustomer(accountNos string) (*models.Customer, error) {
 	var customer *models.Customer
-	if err := pdb.DB.Where("id=?", id).First(customer).Error; err != nil {
+	if err := pdb.DB.Where("accountNos=?", accountNos).First(customer).Error; err != nil {
 		return nil, err
 	}
 	return customer, nil
@@ -43,7 +43,14 @@ func (pdb *PostgresDb) Addcustomer(customer *models.Customer) error {
 	return nil
 }
 func (pdb *PostgresDb) Creditwallet(money *models.Money) (*models.Transaction, error) {
-pdb.DB.
+	accountNos, amount:= money.AccountNos,money.Amount
+
+	user,_:= pdb.Getcustomer(accountNos)
+
+	if err:= pdb.DB.Where("accountNos =?", accountNos).First(&user).Error; err != nil {
+	return nil, err
+	}
+	pdb.DB.Model(user).
 	return nil, nil
 }
 func (pdb *PostgresDb) Debitwallet(money *models.Money) (*models.Transaction, error) {
