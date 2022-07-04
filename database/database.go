@@ -27,8 +27,8 @@ func (pdb *PostgresDb) SetupDb(host, user, password, dbName, port string) error 
 	return nil
 }
 
-func (pdb *PostgresDb) wallet(id string) (*models.Wallet, error) {
-	var customer *models.Wallet
+func (pdb *PostgresDb) Getcustomer(id string) (*models.Customer, error) {
+	var customer *models.Customer
 	if err := pdb.DB.Where("id=?", id).First(customer).Error; err != nil {
 		return nil, err
 	}
