@@ -52,4 +52,10 @@ func TestGetCustomer(t *testing.T) {
 
 	})
 }
-func TestCreditWallet(t *testing.T) {}
+func TestGetTransaction(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+	//mockDB := mockdatabase.NewMockDB(ctrl)
+	//h := handler.Handler{DB: mockDB}
+	//route, _ := router.SetupRouter(&h)
+}
