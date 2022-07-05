@@ -58,6 +58,7 @@ func (h *Handler) DebitWallet(c *gin.Context) {
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": "unable to bind json"})
 		return
 	}
+	customer, err := h.DB.Getcustomer(debit.AccountNos)
 
 	transaction, debitErr := h.DB.Debitwallet(debit)
 
