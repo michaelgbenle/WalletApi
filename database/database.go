@@ -40,6 +40,7 @@ func (pdb *PostgresDb) Creditwallet(money *models.Money) (*models.Transaction, e
 	user, _ := pdb.Getcustomer(accountNos)
 	transaction := &models.Transaction{
 		CustomerId: user.ID,
+		AccountNos: user.AccountNos,
 		Type:       "credit",
 		Success:    false,
 	}
