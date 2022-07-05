@@ -83,8 +83,8 @@ func (h *Handler) DebitWallet(c *gin.Context) {
 
 }
 func (h *Handler) GetTransaction(c *gin.Context) {
-	id := c.Query("id")
-	transactions, err := h.DB.Gettransaction(id)
+	accountNos := c.Query("accountNos")
+	transactions, err := h.DB.Gettransaction(accountNos)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"message": "transaction not found",
@@ -94,8 +94,8 @@ func (h *Handler) GetTransaction(c *gin.Context) {
 	c.IndentedJSON(http.StatusOK, gin.H{
 		"message": transactions,
 	})
-
 }
+
 func (h *Handler) AddCustomer(c *gin.Context) {
 	var customer *models.Customer
 	err := c.ShouldBindJSON(&customer)
