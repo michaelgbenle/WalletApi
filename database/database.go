@@ -62,7 +62,7 @@ func (pdb *PostgresDb) Creditwallet(money *models.Money) (*models.Transaction, e
 	return transaction, nil
 }
 
-func (pdb *PostgresDb) Funds(money *models.Money) bool {
+func (pdb *PostgresDb) InsufficientFunds(money *models.Money) bool {
 	customer, _ := pdb.Getcustomer(money.AccountNos)
 	if customer.Balance < money.Amount {
 		return true
