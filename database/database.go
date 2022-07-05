@@ -93,9 +93,9 @@ func (pdb *PostgresDb) Debitwallet(money *models.Money) (*models.Transaction, er
 
 	return transaction, nil
 }
-func (pdb *PostgresDb) Gettransaction(id string) (*[]models.Transaction, error) {
+func (pdb *PostgresDb) Gettransaction(accountNos string) (*[]models.Transaction, error) {
 	var transactions *[]models.Transaction
-	if err := pdb.DB.Where("customer_id=?", id).Find(&transactions).Error; err != nil {
+	if err := pdb.DB.Where("account_nos=?", accountNos).Find(&transactions).Error; err != nil {
 		return nil, err
 	}
 	return transactions, nil
