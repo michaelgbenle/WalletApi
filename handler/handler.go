@@ -5,7 +5,6 @@ import (
 	"github.com/michaelgbenle/WalletApi/database"
 	"github.com/michaelgbenle/WalletApi/models"
 	"net/http"
-	"sync"
 )
 
 type Handler struct {
@@ -31,7 +30,7 @@ func (h *Handler) GetCustomer(c *gin.Context) {
 }
 
 func (h *Handler) CreditWallet(c *gin.Context) {
-	var mu sync.Mutex
+
 	credit := &models.Money{}
 	if err := c.ShouldBindJSON(credit); err != nil {
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": "unable to bind json"})
@@ -53,6 +52,7 @@ func (h *Handler) CreditWallet(c *gin.Context) {
 
 }
 func (h *Handler) DebitWallet(c *gin.Context) {
+
 	debit := &models.Money{}
 	if err := c.ShouldBindJSON(debit); err != nil {
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": "unable to bind json"})
