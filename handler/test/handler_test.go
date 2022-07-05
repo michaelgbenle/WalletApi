@@ -45,10 +45,10 @@ func TestGetCustomer(t *testing.T) {
 		mockDB.EXPECT().Getcustomer(accountNos).Return(&customer, nil)
 
 		w := httptest.NewRecorder()
-		req, _ := http.NewRequest("GET", "/customer", strings.NewReader(string(bodyJSON)))
+		req, _ := http.NewRequest(http.MethodGet, "/customer?accountNos=1187654311", strings.NewReader(string(bodyJSON)))
 		route.ServeHTTP(w, req)
-		assert.Contains(t, w.Body.String(), customer)
 		assert.Equal(t, http.StatusOK, w.Code)
+		assert.NotContains(t, w.Body.String(), string(bodyJSON))
 
 	})
 }
