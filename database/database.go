@@ -71,6 +71,7 @@ func (pdb *PostgresDb) Debitwallet(money *models.Money) (*models.Transaction, er
 	user, _ := pdb.Getcustomer(accountNos)
 	transaction := &models.Transaction{
 		CustomerId: user.ID,
+		AccountNos: user.AccountNos,
 		Type:       "debit",
 		Success:    false,
 	}
