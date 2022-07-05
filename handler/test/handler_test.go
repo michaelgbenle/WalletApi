@@ -9,10 +9,12 @@ import (
 	"github.com/michaelgbenle/WalletApi/models"
 	"github.com/michaelgbenle/WalletApi/router"
 	"github.com/stretchr/testify/assert"
+	"gorm.io/gorm"
 	"net/http"
 	"net/http/httptest"
 	"strings"
 	"testing"
+	"time"
 )
 
 func TestGetCustomer(t *testing.T) {
@@ -58,4 +60,52 @@ func TestGetTransaction(t *testing.T) {
 	mockDB := mockdatabase.NewMockDB(ctrl)
 	h := handler.Handler{DB: mockDB}
 	route, _ := router.SetupRouter(&h)
+	transactions := &[]models.Transaction{
+		{
+			Model: gorm.Model{ID: 1, CreatedAt: time.Time{}, UpdatedAt: time.Time{}},
+			CustomerId: 2,
+			AccountNos: "1187654311",
+			Type: "credit",
+			Success: true,
+		},
+		{
+			Model: gorm.Model{ID: 1, CreatedAt: time.Time{}, UpdatedAt: time.Time{}},
+			CustomerId: 2,
+			AccountNos: "1187654311",
+			Type: "credit",
+			Success: true,
+
+		},
+		{
+			"ID": 3,
+			"CreatedAt": "2022-07-05T09:53:19.243563+01:00",
+			"UpdatedAt": "2022-07-05T09:53:19.25113+01:00",
+			"DeletedAt": null,
+			"customer_id": 2,
+			"accountNos": "1187654311",
+			"type": "debit",
+			"success": true
+		},
+		{
+			"ID": 4,
+			"CreatedAt": "2022-07-05T10:07:39.939194+01:00",
+			"UpdatedAt": "2022-07-05T10:07:39.944188+01:00",
+			"DeletedAt": null,
+			"customer_id": 2,
+			"accountNos": "1187654311",
+			"type": "debit",
+			"success": true
+		},
+		{
+			"ID": 5,
+			"CreatedAt": "2022-07-05T11:37:06.41214+01:00",
+			"UpdatedAt": "2022-07-05T11:37:06.418631+01:00",
+			"DeletedAt": null,
+			"customer_id": 2,
+			"accountNos": "1187654311",
+			"type": "debit",
+			"success": true
+		}
+	}
+
 }
