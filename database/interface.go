@@ -14,6 +14,7 @@ type DB interface {
 	Debitwallet(money *models.Money) (*models.Transaction, error)
 	Gettransaction(id string) (*[]models.Transaction, error)
 	InsufficientFunds(money *models.Money) bool
+	CreateTransaction(transaction *models.Transaction)
 }
 
 type DbParameters struct {

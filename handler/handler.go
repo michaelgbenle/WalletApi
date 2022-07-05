@@ -58,8 +58,15 @@ func (h *Handler) DebitWallet(c *gin.Context) {
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": "unable to bind json"})
 		return
 	}
+
 	customer, _ := h.DB.Getcustomer(debit.AccountNos)
 	if customer.Balance < debit.Amount {
+		transaction := &models.Transaction{
+			CustomerId: customer.ID,
+			Type:       "debit",
+			Success:    false,
+		}
+		h.DB.CreateTransaction(transaction)
 		c.IndentedJSON(http.StatusBadRequest, gin.H{"error": "insufficient funds"})
 		return
 	}
