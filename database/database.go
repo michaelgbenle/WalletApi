@@ -70,6 +70,7 @@ func (pdb *PostgresDb) InsufficientFunds(money *models.Money) error {
 			Type:       "debit",
 			Success:    false,
 		}
+		pdb.DB.Create(&transaction)
 		return nil
 	}
 	return nil
