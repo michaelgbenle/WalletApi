@@ -5,7 +5,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/michaelgbenle/WalletApi/database"
 	"github.com/michaelgbenle/WalletApi/models"
-	"log"
 	"net/http"
 )
 
@@ -100,14 +99,12 @@ func (h *Handler) GetTransaction(c *gin.Context) {
 }
 func (h *Handler) AddCustomer(c *gin.Context) {
 	var customer *models.Customer
-	log.Println(customer)
 	err := c.ShouldBindJSON(&customer)
 	if err != nil {
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": "unable to bind json"})
 		return
 	}
-	fmt.Println("test 2")
-	fmt.Println(customer)
+
 	if user, userErr := h.DB.Getcustomer(customer.AccountNos); userErr == nil {
 		fmt.Println("this is ", user)
 		fmt.Println("our ", userErr)
