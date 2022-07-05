@@ -13,6 +13,7 @@ type PostgresDb struct {
 	DB *gorm.DB
 }
 
+//SetupDb sets up database and auto migrate schema
 func (pdb *PostgresDb) SetupDb(host, user, password, dbName, port string) error {
 	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable TimeZone=Africa/Lagos", host, user, password, dbName, port)
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
@@ -28,6 +29,7 @@ func (pdb *PostgresDb) SetupDb(host, user, password, dbName, port string) error 
 	return nil
 }
 
+//Getcustomer fetches customer details (name, account number and balance)
 func (pdb *PostgresDb) Getcustomer(accountNos string) (*models.Customer, error) {
 	var customer *models.Customer
 	if err := pdb.DB.Where("account_nos=?", accountNos).First(&customer).Error; err != nil {
@@ -36,6 +38,7 @@ func (pdb *PostgresDb) Getcustomer(accountNos string) (*models.Customer, error) 
 	return customer, nil
 }
 
+//Creditwallet credits a customer's account with amount provided
 func (pdb *PostgresDb) Creditwallet(money *models.Money) (*models.Transaction, error) {
 	accountNos, amount := money.AccountNos, money.Amount
 	user, _ := pdb.Getcustomer(accountNos)
@@ -64,10 +67,12 @@ func (pdb *PostgresDb) Creditwallet(money *models.Money) (*models.Transaction, e
 	return transaction, nil
 }
 
+//CreateTransaction creates a transaction when initiated
 func (pdb *PostgresDb) CreateTransaction(transaction *models.Transaction) {
 	pdb.DB.Create(&transaction)
 }
 
+//Debitwallet debits a customer's account with amount provided
 func (pdb *PostgresDb) Debitwallet(money *models.Money) (*models.Transaction, error) {
 	var mu sync.Mutex
 	accountNos, amount := money.AccountNos, money.Amount
@@ -96,6 +101,8 @@ func (pdb *PostgresDb) Debitwallet(money *models.Money) (*models.Transaction, er
 
 	return transaction, nil
 }
+
+//Gettransaction fetches a customer's transactions
 func (pdb *PostgresDb) Gettransaction(accountNos string) (*[]models.Transaction, error) {
 	var transactions *[]models.Transaction
 	if err := pdb.DB.Where("account_nos=?", accountNos).Find(&transactions).Error; err != nil {
@@ -104,6 +111,7 @@ func (pdb *PostgresDb) Gettransaction(accountNos string) (*[]models.Transaction,
 	return transactions, nil
 }
 
+//Addcustomer creates/add a new customer to the database
 func (pdb *PostgresDb) Addcustomer(customer models.Customer) error {
 	customer.Balance = 0
 	if err := pdb.DB.Create(&customer).Error; err != nil {
