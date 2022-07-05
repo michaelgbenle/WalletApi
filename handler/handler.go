@@ -114,5 +114,4 @@ func (h *Handler) AddCustomer(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{"message": "Customer added successfully"})
-
 }
