@@ -13,6 +13,7 @@ type DB interface {
 	Creditwallet(money *models.Money) (*models.Transaction, error)
 	Debitwallet(money *models.Money) (*models.Transaction, error)
 	Gettransaction(id string) (*[]models.Transaction, error)
+	InsufficientFunds(money *models.Money) bool
 }
 
 type DbParameters struct {
