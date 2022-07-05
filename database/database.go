@@ -75,6 +75,7 @@ func (pdb *PostgresDb) InsufficientFunds(money *models.Money) error {
 	}
 	return nil
 }
+func (pdb *PostgresDb) CreateTransaction(money *models.Money) {}
 
 func (pdb *PostgresDb) Debitwallet(money *models.Money) (*models.Transaction, error) {
 	accountNos, amount := money.AccountNos, money.Amount
