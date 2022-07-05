@@ -63,6 +63,7 @@ func (h *Handler) DebitWallet(c *gin.Context) {
 	if customer.Balance < debit.Amount {
 		transaction := &models.Transaction{
 			CustomerId: customer.ID,
+			AccountNos: customer.AccountNos,
 			Type:       "debit",
 			Success:    false,
 		}
