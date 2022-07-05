@@ -12,6 +12,7 @@ type Customer struct {
 type Transaction struct {
 	gorm.Model
 	CustomerId uint   `gorm:"foreignKey" json:"customer_id"`
+	AccountNos uint   `gorm:"foreignKey" json:"accountNos"`
 	Type       string `json:"type"`
 	Success    bool   `json:"success"`
 }
