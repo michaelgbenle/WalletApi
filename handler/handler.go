@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/michaelgbenle/WalletApi/database"
 	"github.com/michaelgbenle/WalletApi/models"
@@ -105,9 +104,7 @@ func (h *Handler) AddCustomer(c *gin.Context) {
 		return
 	}
 
-	if user, userErr := h.DB.Getcustomer(customer.AccountNos); userErr == nil {
-		fmt.Println("this is ", user)
-		fmt.Println("our ", userErr)
+	if _, userErr := h.DB.Getcustomer(customer.AccountNos); userErr == nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "customer exists"})
 		return
 	}
