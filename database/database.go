@@ -6,6 +6,7 @@ import (
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"log"
+	"sync"
 )
 
 type PostgresDb struct {
@@ -68,6 +69,7 @@ func (pdb *PostgresDb) CreateTransaction(transaction *models.Transaction) {
 }
 
 func (pdb *PostgresDb) Debitwallet(money *models.Money) (*models.Transaction, error) {
+	var mu sync.Mutex
 	accountNos, amount := money.AccountNos, money.Amount
 	user, _ := pdb.Getcustomer(accountNos)
 	transaction := &models.Transaction{
