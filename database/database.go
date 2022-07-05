@@ -70,7 +70,7 @@ func (pdb *PostgresDb) InsufficientFunds(money *models.Money) error {
 			Type:       "debit",
 			Success:    false,
 		}
-		return
+		return nil
 	}
 	return nil
 }
