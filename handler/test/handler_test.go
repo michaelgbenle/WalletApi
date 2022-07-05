@@ -52,3 +52,4 @@ func TestGetCustomer(t *testing.T) {
 
 	})
 }
+func TestCreditWallet(t *testing.T) {}
