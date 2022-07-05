@@ -34,7 +34,7 @@ func TestGetCustomer(t *testing.T) {
 		t.Fail()
 	}
 	t.Run("Testing for get customer", func(t *testing.T) {
-		mockDB.EXPECT().Getcustomer(accountNos).Return(nil, errors.New("account number should be 10 digits"))
+		mockDB.EXPECT().Getcustomer(accountNos).Return(nil, errors.New("errors exist"))
 		rw := httptest.NewRecorder()
 		req, _ := http.NewRequest(http.MethodGet, "/customer?accountNos=1187654311", strings.NewReader(string(bodyJSON)))
 
@@ -60,52 +60,44 @@ func TestGetTransaction(t *testing.T) {
 	mockDB := mockdatabase.NewMockDB(ctrl)
 	h := handler.Handler{DB: mockDB}
 	route, _ := router.SetupRouter(&h)
-	transactions := &[]models.Transaction{
+	var accountNos = "1187654311"
+	transactions := []models.Transaction{
 		{
-			Model: gorm.Model{ID: 1, CreatedAt: time.Time{}, UpdatedAt: time.Time{}},
+			Model:      gorm.Model{ID: 1, CreatedAt: time.Time{}, UpdatedAt: time.Time{}},
 			CustomerId: 2,
 			AccountNos: "1187654311",
-			Type: "credit",
-			Success: true,
+			Type:       "credit",
+			Success:    true,
 		},
 		{
-			Model: gorm.Model{ID: 1, CreatedAt: time.Time{}, UpdatedAt: time.Time{}},
+			Model:      gorm.Model{ID: 1, CreatedAt: time.Time{}, UpdatedAt: time.Time{}},
 			CustomerId: 2,
 			AccountNos: "1187654311",
-			Type: "credit",
-			Success: true,
-
+			Type:       "credit",
+			Success:    true,
 		},
 		{
-			"ID": 3,
-			"CreatedAt": "2022-07-05T09:53:19.243563+01:00",
-			"UpdatedAt": "2022-07-05T09:53:19.25113+01:00",
-			"DeletedAt": null,
-			"customer_id": 2,
-			"accountNos": "1187654311",
-			"type": "debit",
-			"success": true
+			Model:      gorm.Model{ID: 1, CreatedAt: time.Time{}, UpdatedAt: time.Time{}},
+			CustomerId: 2,
+			AccountNos: "1187654311",
+			Type:       "credit",
+			Success:    true,
 		},
-		{
-			"ID": 4,
-			"CreatedAt": "2022-07-05T10:07:39.939194+01:00",
-			"UpdatedAt": "2022-07-05T10:07:39.944188+01:00",
-			"DeletedAt": null,
-			"customer_id": 2,
-			"accountNos": "1187654311",
-			"type": "debit",
-			"success": true
-		},
-		{
-			"ID": 5,
-			"CreatedAt": "2022-07-05T11:37:06.41214+01:00",
-			"UpdatedAt": "2022-07-05T11:37:06.418631+01:00",
-			"DeletedAt": null,
-			"customer_id": 2,
-			"accountNos": "1187654311",
-			"type": "debit",
-			"success": true
-		}
 	}
+	bodyJSON, err := json.Marshal(transactions)
+	if err != nil {
+		t.Fail()
+	}
+	t.Run("Testing for all transactions", func(t *testing.T) {
+		mockDB.EXPECT().Gettransaction(accountNos).Return(transactions, nil)
+		rw := httptest.NewRecorder()
+		req, _ := http.NewRequest(http.MethodGet,
+			"/transactions?accountNos=1187654311",
+			strings.NewReader(string(bodyJSON)))
+
+		route.ServeHTTP(rw, req)
+		assert.Equal(t, http.StatusOK, rw.Code)
+		assert.Contains(t, rw.Body.String(), string(bodyJSON))
+	})
 
 }
