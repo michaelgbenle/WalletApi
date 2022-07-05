@@ -13,6 +13,8 @@ type PostgresDb struct {
 	DB *gorm.DB
 }
 
+var mu sync.Mutex
+
 //SetupDb sets up database and auto migrate schema
 func (pdb *PostgresDb) SetupDb(host, user, password, dbName, port string) error {
 	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable TimeZone=Africa/Lagos", host, user, password, dbName, port)
@@ -74,7 +76,7 @@ func (pdb *PostgresDb) CreateTransaction(transaction *models.Transaction) {
 
 //Debitwallet debits a customer's account with amount provided
 func (pdb *PostgresDb) Debitwallet(money *models.Money) (*models.Transaction, error) {
-	var mu sync.Mutex
+
 	accountNos, amount := money.AccountNos, money.Amount
 	user, _ := pdb.Getcustomer(accountNos)
 	transaction := &models.Transaction{
@@ -86,6 +88,7 @@ func (pdb *PostgresDb) Debitwallet(money *models.Money) (*models.Transaction, er
 	if err := pdb.DB.Create(&transaction).Error; err != nil {
 		return nil, err
 	}
+
 	mu.Lock()
 	if err := pdb.DB.Model(user).Where("account_nos=?", accountNos).
 		Update("balance", user.Balance-amount).
@@ -93,6 +96,7 @@ func (pdb *PostgresDb) Debitwallet(money *models.Money) (*models.Transaction, er
 		return nil, err
 	}
 	mu.Unlock()
+
 	if err := pdb.DB.Model(transaction).Where("Customer_id=?", user.ID).
 		Update("success", true).
 		Error; err != nil {

@@ -2,7 +2,7 @@ package test
 
 import (
 	"encoding/json"
-	"fmt"
+	"errors"
 	"github.com/golang/mock/gomock"
 	mockdatabase "github.com/michaelgbenle/WalletApi/database/mocks"
 	"github.com/michaelgbenle/WalletApi/handler"
@@ -17,32 +17,38 @@ import (
 
 func TestGetCustomer(t *testing.T) {
 	ctrl := gomock.NewController(t)
-	defer ctrl.Finish()
+	//defer ctrl.Finish()
 	mockDB := mockdatabase.NewMockDB(ctrl)
 	h := handler.Handler{DB: mockDB}
-	route, _ := router.SetupRouter(h)
-	var accountNos uint = 1187654311
+	route, _ := router.SetupRouter(&h)
+	var accountNos = "1187654311"
 	customer := models.Customer{
 		Name:       "Bella",
-		AccountNos: "",
-		Balance:    1187654311,
+		AccountNos: "1187654311",
+		Balance:    0,
 	}
-	bodyJSON, err := json.Marshal(customer)
+	bodyJSON, err := json.Marshal(&customer)
 	if err != nil {
 		t.Fail()
 	}
-	t.Run("Testing for all product", func(t *testing.T) {
-		mockDB.EXPECT().Getcustomer().Return(customer)
+	t.Run("Testing for get customer", func(t *testing.T) {
+		mockDB.EXPECT().Getcustomer(accountNos).Return(nil, errors.New("account number should be 10 digits"))
 		rw := httptest.NewRecorder()
-		req, err := http.NewRequest(http.MethodGet,
-			"/api/v1/products",
-			strings.NewReader(string(bodyJSON)))
-		if err != nil {
-			fmt.Printf("errrr here %v \n", err)
-			return
-		}
+		req, _ := http.NewRequest(http.MethodGet, "/customer?accountNos=1187654311", strings.NewReader(string(bodyJSON)))
+
 		route.ServeHTTP(rw, req)
-		assert.Equal(t, http.StatusOK, rw.Code)
-		assert.Contains(t, rw.Body.String(), string(bodyJSON))
+		assert.Contains(t, rw.Body.String(), "user not found")
+		assert.Equal(t, rw.Code, 400)
+
+	})
+	t.Run("Testing for get customer", func(t *testing.T) {
+		mockDB.EXPECT().Getcustomer(accountNos).Return(&customer, nil)
+
+		w := httptest.NewRecorder()
+		req, _ := http.NewRequest("GET", "/customer", strings.NewReader(string(bodyJSON)))
+		route.ServeHTTP(w, req)
+		assert.Contains(t, w.Body.String(), customer)
+		assert.Equal(t, http.StatusOK, w.Code)
+
 	})
 }
