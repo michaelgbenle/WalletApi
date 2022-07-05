@@ -65,6 +65,11 @@ func (pdb *PostgresDb) Creditwallet(money *models.Money) (*models.Transaction, e
 func (pdb *PostgresDb) InsufficientFunds(money *models.Money) bool {
 	customer, _ := pdb.Getcustomer(money.AccountNos)
 	if customer.Balance < money.Amount {
+		transaction := &models.Transaction{
+			CustomerId: customer.ID,
+			Type:       "debit",
+			Success:    false,
+		}
 		return true
 	}
 	return false
