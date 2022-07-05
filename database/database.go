@@ -81,12 +81,13 @@ func (pdb *PostgresDb) Debitwallet(money *models.Money) (*models.Transaction, er
 	if err := pdb.DB.Create(&transaction).Error; err != nil {
 		return nil, err
 	}
-
+	mu.Lock()
 	if err := pdb.DB.Model(user).Where("account_nos=?", accountNos).
 		Update("balance", user.Balance-amount).
 		Error; err != nil {
 		return nil, err
 	}
+	mu.Unlock()
 	if err := pdb.DB.Model(transaction).Where("Customer_id=?", user.ID).
 		Update("success", true).
 		Error; err != nil {
