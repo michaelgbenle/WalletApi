@@ -19,7 +19,7 @@ func (h *Handler) GetCustomer(c *gin.Context) {
 	}
 	customer, err := h.DB.Getcustomer(accountNos)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
+		c.IndentedJSON(http.StatusBadRequest, gin.H{
 			"message": "user not found",
 		})
 		return
