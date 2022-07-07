@@ -100,7 +100,7 @@ func TestGetTransaction(t *testing.T) {
 
 }
 
-func TestGetCustomer(t *testing.T) {
+func TestCreditWallet(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	//defer ctrl.Finish()
 	mockDB := mockdatabase.NewMockDB(ctrl)
