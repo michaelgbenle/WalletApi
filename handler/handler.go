@@ -36,7 +36,7 @@ func (h *Handler) CreditWallet(c *gin.Context) {
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": "unable to bind json"})
 		return
 	}
-	if len(credit.AccountNos) < 10 {
+	if len(credit.AccountNos) != 10 {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "account number should be 10 digits"})
 	}
 
