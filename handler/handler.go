@@ -13,7 +13,7 @@ type Handler struct {
 
 func (h *Handler) GetCustomer(c *gin.Context) {
 	accountNos := c.Query("accountNos")
-	if len(accountNos) < 10 {
+	if len(accountNos) != 10 {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "account number should be 10 digits"})
 		return
 	}
