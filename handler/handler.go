@@ -38,6 +38,7 @@ func (h *Handler) CreditWallet(c *gin.Context) {
 	}
 	if len(credit.AccountNos) != 10 {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "account number should be 10 digits"})
+		return
 	}
 
 	transaction, CreditErr := h.DB.Creditwallet(credit)
