@@ -75,7 +75,7 @@ func (h *Handler) DebitWallet(c *gin.Context) {
 
 	transaction, debitErr := h.DB.Debitwallet(debit)
 	if debitErr != nil {
-		c.IndentedJSON(http.StatusBadRequest, gin.H{"error": "unable to debit wallet"})
+		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": "unable to debit wallet"})
 		return
 	}
 
