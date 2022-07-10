@@ -154,13 +154,13 @@ func TestDebitWallet(t *testing.T) {
 		AccountNos: "1187654311",
 		Balance:    0,
 	}
-	mockDB.EXPECT().Getcustomer(gomock.Eq(debit.AccountNos)).Return(&customer, nil)
+	mockDB.EXPECT().Getcustomer(gomock.Eq(debit.AccountNos)).Return(&customer)
 
 	bodyJSON, err := json.Marshal(transaction)
 	if err != nil {
 		t.Fail()
 	}
-	mockDB.EXPECT().Getcustomer(debit.AccountNos).Return(&customer, nil)
+	mockDB.EXPECT().Getcustomer(debit.AccountNos).Return(&customer)
 
 	t.Run("Get Customer", func(t *testing.T) {
 		w := httptest.NewRecorder()
