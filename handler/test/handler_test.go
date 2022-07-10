@@ -111,5 +111,23 @@ func TestCreditWallet(t *testing.T) {
 		AccountNos: "1187654311",
 		Amount:     1000,
 	}
+	transaction := models.Transaction{
+		AccountNos: "1187654311",
+		Type:       "credit",
+		Success:    true,
+	}
+	bodyJSON, err := json.Marshal(transaction)
+	if err != nil {
+		t.Fail()
+	}
+	t.Run("Testing for successful credit", func(t *testing.T) {
+		mockDB.EXPECT().Creditwallet(credit).Return(&transaction, nil)
+		rw := httptest.NewRecorder()
+		req, _ := http.NewRequest(http.MethodGet, "/credit", strings.NewReader(string(bodyJSON)))
 
+		route.ServeHTTP(rw, req)
+		assert.Equal(t, http.StatusOK, rw.Code)
+		assert.Contains(t, rw.Body.String(), string(bodyJSON))
+
+	})
 }
