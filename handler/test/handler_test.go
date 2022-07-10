@@ -132,14 +132,14 @@ func TestCreditWallet(t *testing.T) {
 
 }
 
-func TestCreditWallet(t *testing.T) {
+func TestDebitWallet(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 	mockDB := mockdatabase.NewMockDB(ctrl)
 	h := handler.Handler{DB: mockDB}
 	route, _ := router.SetupRouter(&h)
 
-	credit := &models.Money{
+	debit := &models.Money{
 		AccountNos: "1187654311",
 		Amount:     0,
 	}
