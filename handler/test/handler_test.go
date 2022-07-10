@@ -162,11 +162,13 @@ func TestDebitWallet(t *testing.T) {
 	}
 	mockDB.EXPECT().Getcustomer(gomock.Eq(debit.AccountNos)).Return(&customer, nil)
 
-	rw := httptest.NewRecorder()
-	req, _ := http.NewRequest(http.MethodGet, "/debit", strings.NewReader(string(bodyJSON)))
-	route.ServeHTTP(rw, req)
+	t.Run("Get Customer", func(t *testing.T) {
+		w := httptest.NewRecorder()
+		req, _ := http.NewRequest("POST", "/api/v1/sellersignup", strings.NewReader(string(newUser)))
+		r.ServeHTTP(w, req)
 
-	assert.Equal(t, http.StatusOK, rw.Code)
-	assert.NotContains(t, rw.Body.String(), transaction)
+		assert.Equal(t, http.StatusBadRequest, w.Code)
+		assert.Contains(t, w.Body.String(), "username exists")
+	})
 
 }
