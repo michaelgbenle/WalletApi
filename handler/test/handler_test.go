@@ -160,7 +160,7 @@ func TestDebitWallet(t *testing.T) {
 	if err != nil {
 		t.Fail()
 	}
-	mockDB.EXPECT().Getcustomer(gomock.Eq(debit.AccountNos)).Return(&customer, nil)
+	mockDB.EXPECT().Getcustomer(debit.AccountNos).Return(&customer, nil)
 
 	t.Run("Get Customer", func(t *testing.T) {
 		w := httptest.NewRecorder()
