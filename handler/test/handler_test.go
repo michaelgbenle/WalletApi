@@ -148,6 +148,12 @@ func TestDebitWallet(t *testing.T) {
 		Type:       "credit",
 		Success:    true,
 	}
+	customer := models.Customer{
+
+		Name:       "bella",
+		AccountNos: "1187654311",
+		Balance:    0,
+	}
 	bodyJSON, err := json.Marshal(transaction)
 	if err != nil {
 		t.Fail()
