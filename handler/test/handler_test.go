@@ -111,6 +111,7 @@ func TestCreditWallet(t *testing.T) {
 		AccountNos: "1187654311",
 		Amount:     1000,
 	}
+	var message string = "wallet debited successfully"
 	transaction := models.Transaction{
 		AccountNos: "1187654311",
 		Type:       "credit",
