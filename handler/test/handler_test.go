@@ -128,7 +128,7 @@ func TestCreditWallet(t *testing.T) {
 
 		route.ServeHTTP(rw, req)
 		assert.Equal(t, http.StatusOK, rw.Code)
-		assert.Contains(t, rw.Body.String(), message)
+		assert.Contains(t, rw.Body.String(), transaction)
 
 	})
 }
