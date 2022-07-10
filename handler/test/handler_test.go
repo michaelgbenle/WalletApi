@@ -131,3 +131,16 @@ func TestCreditWallet(t *testing.T) {
 	assert.NotContains(t, rw.Body.String(), transaction)
 
 }
+
+func TestCreditWallet(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+	mockDB := mockdatabase.NewMockDB(ctrl)
+	h := handler.Handler{DB: mockDB}
+	route, _ := router.SetupRouter(&h)
+
+	credit := &models.Money{
+		AccountNos: "1187654311",
+		Amount:     0,
+	}
+}
