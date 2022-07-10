@@ -146,7 +146,7 @@ func TestDebitWallet(t *testing.T) {
 	transaction := models.Transaction{
 		AccountNos: "1187654311",
 		Type:       "credit",
-		Success:    true,
+		Success:    false,
 	}
 	customer := models.Customer{
 
@@ -163,7 +163,7 @@ func TestDebitWallet(t *testing.T) {
 	req, _ := http.NewRequest(http.MethodGet, "/debit", strings.NewReader(string(bodyJSON)))
 	route.ServeHTTP(rw, req)
 
-	mockDB.EXPECT().CreateTransaction(debit.AccountNos).Return(&transaction, nil)
+	mockDB.EXPECT().CreateTransaction(transaction).Return(&transaction, nil)
 	rw = httptest.NewRecorder()
 	req, _ = http.NewRequest(http.MethodPatch, "/debit", strings.NewReader(string(bodyJSON)))
 
