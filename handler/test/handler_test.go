@@ -165,7 +165,7 @@ func TestDebitWallet(t *testing.T) {
 	t.Run("Get Customer", func(t *testing.T) {
 		w := httptest.NewRecorder()
 		req, _ := http.NewRequest("POST", "/api/v1/sellersignup", strings.NewReader(string(bodyJSON)))
-		r.ServeHTTP(w, req)
+		route.ServeHTTP(w, req)
 
 		assert.Equal(t, http.StatusBadRequest, w.Code)
 		assert.Contains(t, w.Body.String(), "username exists")
