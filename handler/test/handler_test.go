@@ -122,7 +122,7 @@ func TestCreditWallet(t *testing.T) {
 		t.Fail()
 	}
 	t.Run("Testing for successful credit", func(t *testing.T) {
-		mockDB.EXPECT().Creditwallet(credit).Return(&transaction, nil)
+		mockDB.EXPECT().Creditwallet(credit).Return(transaction, nil)
 		rw := httptest.NewRecorder()
 		req, _ := http.NewRequest(http.MethodPatch, "/credit", strings.NewReader(string(bodyJSON)))
 
