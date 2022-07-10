@@ -107,7 +107,7 @@ func TestCreditWallet(t *testing.T) {
 	h := handler.Handler{DB: mockDB}
 	route, _ := router.SetupRouter(&h)
 
-	credit := models.Money{
+	credit := &models.Money{
 		AccountNos: "1187654311",
 		Amount:     1000,
 	}
