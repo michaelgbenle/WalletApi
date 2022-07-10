@@ -164,7 +164,7 @@ func TestDebitWallet(t *testing.T) {
 
 	t.Run("Get Customer", func(t *testing.T) {
 		w := httptest.NewRecorder()
-		req, _ := http.NewRequest("POST", "/api/v1/sellersignup", strings.NewReader(string(newUser)))
+		req, _ := http.NewRequest("POST", "/api/v1/sellersignup", strings.NewReader(string(bodyJSON)))
 		r.ServeHTTP(w, req)
 
 		assert.Equal(t, http.StatusBadRequest, w.Code)
