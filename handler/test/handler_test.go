@@ -124,11 +124,11 @@ func TestCreditWallet(t *testing.T) {
 	t.Run("Testing for successful credit", func(t *testing.T) {
 		mockDB.EXPECT().Creditwallet(credit).Return(&transaction, nil)
 		rw := httptest.NewRecorder()
-		req, _ := http.NewRequest(http.MethodPost, "/credit", strings.NewReader(string(bodyJSON)))
+		req, _ := http.NewRequest(http.MethodPatch, "/credit", strings.NewReader(string(bodyJSON)))
 
 		route.ServeHTTP(rw, req)
 		assert.Equal(t, http.StatusOK, rw.Code)
-		assert.Contains(t, rw.Body.String(), transaction)
+		assert.Contains(t, rw.Body.String(), message)
 
 	})
 }
