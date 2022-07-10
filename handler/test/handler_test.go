@@ -102,7 +102,7 @@ func TestGetTransaction(t *testing.T) {
 
 func TestCreditWallet(t *testing.T) {
 	ctrl := gomock.NewController(t)
-	//defer ctrl.Finish()
+	defer ctrl.Finish()
 	mockDB := mockdatabase.NewMockDB(ctrl)
 	h := handler.Handler{DB: mockDB}
 	route, _ := router.SetupRouter(&h)
