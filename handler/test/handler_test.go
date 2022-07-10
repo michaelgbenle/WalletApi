@@ -109,7 +109,7 @@ func TestCreditWallet(t *testing.T) {
 
 	credit := &models.Money{
 		AccountNos: "1187654311",
-		Amount:     1000,
+		Amount:     1111,
 	}
 	var message string = "wallet debited successfully"
 	transaction := models.Transaction{
@@ -121,14 +121,13 @@ func TestCreditWallet(t *testing.T) {
 	if err != nil {
 		t.Fail()
 	}
-	t.Run("Testing for successful credit", func(t *testing.T) {
-		mockDB.EXPECT().Creditwallet(credit).Return(transaction, nil)
-		rw := httptest.NewRecorder()
-		req, _ := http.NewRequest(http.MethodPatch, "/credit", strings.NewReader(string(bodyJSON)))
 
-		route.ServeHTTP(rw, req)
-		assert.Equal(t, http.StatusOK, rw.Code)
-		assert.Contains(t, rw.Body.String(), message)
+	mockDB.EXPECT().Creditwallet(credit).Return(&transaction, nil)
+	rw := httptest.NewRecorder()
+	req, _ := http.NewRequest(http.MethodPatch, "/credit", strings.NewReader(string(bodyJSON)))
 
-	})
+	route.ServeHTTP(rw, req)
+	assert.Equal(t, http.StatusOK, rw.Code)
+	assert.Contains(t, rw.Body.String(), message)
+
 }
