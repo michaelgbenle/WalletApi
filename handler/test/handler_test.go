@@ -154,7 +154,7 @@ func TestDebitWallet(t *testing.T) {
 	}
 	mockDB.EXPECT().Creditwallet(debit).Return(&transaction, nil)
 	rw := httptest.NewRecorder()
-	req, _ := http.NewRequest(http.MethodPatch, "/credit", strings.NewReader(string(bodyJSON)))
+	req, _ := http.NewRequest(http.MethodPatch, "/debit", strings.NewReader(string(bodyJSON)))
 
 	route.ServeHTTP(rw, req)
 	assert.Equal(t, http.StatusOK, rw.Code)
