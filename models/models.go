@@ -4,8 +4,8 @@ import "gorm.io/gorm"
 
 type Customer struct {
 	gorm.Model
-	Name       string `json:"name"`
-	AccountNos string `gorm:"unique",json:"accountNos"`
+	Name       string `json:"name" binding:"required"`
+	AccountNos string `gorm:"unique",json:"accountNos" binding:"required,email"`
 	Balance    uint   `json:"balance"`
 }
 

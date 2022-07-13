@@ -19,7 +19,7 @@ import (
 
 func TestGetCustomer(t *testing.T) {
 	ctrl := gomock.NewController(t)
-	//defer ctrl.Finish()
+	defer ctrl.Finish()
 	mockDB := mockdatabase.NewMockDB(ctrl)
 	h := handler.Handler{DB: mockDB}
 	route, _ := router.SetupRouter(&h)
@@ -113,7 +113,7 @@ func TestCreditWallet(t *testing.T) {
 	}
 
 	transaction := models.Transaction{
-		AccountNos: "1187654311",
+		AccountNos: credit.AccountNos,
 		Type:       "credit",
 		Success:    true,
 	}
@@ -143,32 +143,87 @@ func TestDebitWallet(t *testing.T) {
 		AccountNos: "1187654311",
 		Amount:     0,
 	}
+
 	transaction := models.Transaction{
-		AccountNos: "1187654311",
-		Type:       "credit",
-		Success:    false,
+		AccountNos: debit.AccountNos,
+		Type:       "debit",
+		Success:    true,
 	}
-	customer := models.Customer{
-
-		Name:       "bella",
-		AccountNos: "1187654311",
-		Balance:    0,
-	}
-	mockDB.EXPECT().Getcustomer(debit.AccountNos).Return(&customer)
-
 	bodyJSON, err := json.Marshal(transaction)
 	if err != nil {
 		t.Fail()
 	}
-	mockDB.EXPECT().Getcustomer(debit.AccountNos).Return(&customer)
-
-	t.Run("Get Customer", func(t *testing.T) {
+	t.Run("Testing for bad request", func(t *testing.T) {
+		mockDB.EXPECT().Getcustomer(debit.AccountNos).Return(, nil)
 		w := httptest.NewRecorder()
 		req, _ := http.NewRequest("PATCH", "/debit", strings.NewReader(string(bodyJSON)))
 		route.ServeHTTP(w, req)
 
-		assert.Equal(t, http.StatusBadRequest, w.Code)
-		assert.Contains(t, w.Body.String(), "insufficient funds")
+		assert.Equal(t, http.StatusInternalServerError, w.Code)
+		assert.Contains(t, w.Body.String(), "unable to debit wallet")
 	})
+	t.Run("Testing for bad request", func(t *testing.T) {
+		mockDB.EXPECT().Debitwallet(debit).Return(nil, errors.New("error"))
+		w := httptest.NewRecorder()
+		req, _ := http.NewRequest("PATCH", "/debit", strings.NewReader(string(bodyJSON)))
+		route.ServeHTTP(w, req)
+
+		assert.Equal(t, http.StatusInternalServerError, w.Code)
+		assert.Contains(t, w.Body.String(), "unable to debit wallet")
+	})
+
+	t.Run("for success", func(t *testing.T) {
+		mockDB.EXPECT().Debitwallet(debit).Return(&transaction, nil)
+		rw := httptest.NewRecorder()
+		req, _ := http.NewRequest(http.MethodPatch, "/debit", strings.NewReader(string(bodyJSON)))
+
+		route.ServeHTTP(rw, req)
+		assert.Equal(t, http.StatusOK, rw.Code)
+		assert.NotContains(t, rw.Body.String(), transaction)
+	})
+	//mockDB.EXPECT().Getcustomer(debit.AccountNos).Return(&customer, nil)
+
+	//t.Run("Testing for bad request", func(t *testing.T) {
+	//
+	//})
+	//t.Run("Testing for bad request", func(t *testing.T) {
+	//	bodyJSON, err := json.Marshal(transaction)
+	//	if err != nil {
+	//		t.Fail()
+	//	}
+	//	//mockDB.EXPECT().CreateTransaction(transaction)
+	//	mockDB.EXPECT().Debitwallet(&debit).Return(&transaction, nil)
+	//	w := httptest.NewRecorder()
+	//	req, _ := http.NewRequest("PATCH", "/debit", strings.NewReader(string(bodyJSON)))
+	//	route.ServeHTTP(w, req)
+	//
+	//	assert.Equal(t, http.StatusOK, w.Code)
+	//	assert.Contains(t, w.Body.String(), transaction)
+	//})
+	//t.Run("Testing for bad request", func(t *testing.T) {
+	//	bodyJSON, err := json.Marshal(transaction)
+	//	if err != nil {
+	//		t.Fail()
+	//	}
+	//	mockDB.EXPECT().Debitwallet(&debit).Return(nil, errors.New("error"))
+	//	w := httptest.NewRecorder()
+	//	req, _ := http.NewRequest("PATCH", "/debit", strings.NewReader(string(bodyJSON)))
+	//	route.ServeHTTP(w, req)
+	//
+	//	assert.Equal(t, http.StatusInternalServerError, w.Code)
+	//	assert.Contains(t, w.Body.String(), "unable to debit wallet")
+	//})
+
+	//mockDB.EXPECT().Getcustomer(debit.AccountNos).Return(&customer, nil)
+
+	//t.Run("Get Customer", func(t *testing.T) {
+	//	mockDB.EXPECT().Getcustomer(debit[1].AccountNos).Return(nil, errors.New("error"))
+	//	w := httptest.NewRecorder()
+	//	req, _ := http.NewRequest("PATCH", "/debit", nil)
+	//	route.ServeHTTP(w, req)
+	//
+	//	assert.Equal(t, http.StatusBadRequest, w.Code)
+	//	assert.Contains(t, w.Body.String(), "insufficient funds")
+	//})
 
 }
