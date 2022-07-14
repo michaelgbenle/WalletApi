@@ -152,20 +152,14 @@ func TestDebitWallet(t *testing.T) {
 
 	transaction := models.Transaction{
 		Model: gorm.Model{
-			ID:        1,
-			CreatedAt: time.Time{},
-			UpdatedAt: time.Time{},
-			DeletedAt: gorm.DeletedAt{},
-		},
+			ID: 1, CreatedAt: time.Time{}, UpdatedAt: time.Time{}, DeletedAt: gorm.DeletedAt{}},
 		CustomerId: customer.ID,
 		AccountNos: debit.AccountNos,
 		Type:       "debit",
 		Success:    true,
 	}
-	bodyJSON, err := json.Marshal(transaction)
-	if err != nil {
-		t.Fail()
-	}
+	bodyJSON, _ := json.Marshal(transaction)
+
 	t.Run("Testing for bad request", func(t *testing.T) {
 		mockDB.EXPECT().Getcustomer(debit.AccountNos).Return(customer, nil)
 		w := httptest.NewRecorder()
