@@ -171,12 +171,12 @@ func TestDebitWallet(t *testing.T) {
 	t.Run("Testing for success", func(t *testing.T) {
 		mockDB.EXPECT().Getcustomer(debit.AccountNos).Return(customer, nil)
 		mockDB.EXPECT().CreateTransaction(transaction)
-		mockDB.EXPECT().Debitwallet(debit).Return(customer, nil)
+		mockDB.EXPECT().Debitwallet(debit).Return(transaction1, nil)
 		w := httptest.NewRecorder()
 		req, _ := http.NewRequest("PATCH", "/debit", strings.NewReader(string(bodyJSON)))
 		route.ServeHTTP(w, req)
 
-		assert.Equal(t, http.StatusInternalServerError, w.Code)
+		assert.Equal(t, http.StatusOK, w.Code)
 		assert.Contains(t, w.Body.String(), "unable to debit wallet")
 	})
 	//t.Run("Testing for bad request", func(t *testing.T) {
