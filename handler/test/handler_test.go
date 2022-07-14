@@ -150,7 +150,7 @@ func TestDebitWallet(t *testing.T) {
 		Amount:     0,
 	}
 
-	transaction := models.Transaction{
+	transaction := &models.Transaction{
 		Model: gorm.Model{
 			ID: 1, CreatedAt: time.Time{}, UpdatedAt: time.Time{}, DeletedAt: gorm.DeletedAt{}},
 		CustomerId: customer.ID,
@@ -166,38 +166,18 @@ func TestDebitWallet(t *testing.T) {
 		Type:       "debit",
 		Success:    true,
 	}
-	bodyJSON, _ := json.Marshal(transaction)
+	bodyJSON, _ := json.Marshal(transaction1)
 
 	t.Run("Testing for success", func(t *testing.T) {
-		mockDB.EXPECT().Getcustomer(debit.AccountNos).Return(customer, nil)
-		mockDB.EXPECT().CreateTransaction(transaction)
-		mockDB.EXPECT().Debitwallet(debit).Return(transaction1, nil)
+		mockDB.EXPECT().Getcustomer(debit.AccountNos).Return(&customer, nil)
+		mockDB.EXPECT().CreateTransaction(transaction).AnyTimes()
+		mockDB.EXPECT().Debitwallet(debit).Return(&transaction1, nil)
 		w := httptest.NewRecorder()
 		req, _ := http.NewRequest("PATCH", "/debit", strings.NewReader(string(bodyJSON)))
 		route.ServeHTTP(w, req)
 
 		assert.Equal(t, http.StatusOK, w.Code)
-		assert.Contains(t, w.Body.String(), "unable to debit wallet")
+		assert.Contains(t, w.Body.String(), string(bodyJSON))
 	})
-	//t.Run("Testing for bad request", func(t *testing.T) {
-	//	mockDB.EXPECT().Debitwallet(debit).Return(nil, errors.New("error"))
-	//	w := httptest.NewRecorder()
-	//	req, _ := http.NewRequest("PATCH", "/debit", strings.NewReader(string(bodyJSON)))
-	//	route.ServeHTTP(w, req)
-	//
-	//	assert.Equal(t, http.StatusInternalServerError, w.Code)
-	//	assert.Contains(t, w.Body.String(), "unable to debit wallet")
-	//})
-	//
-	//t.Run("for success", func(t *testing.T) {
-	//	mockDB.EXPECT().Debitwallet(debit).Return(&transaction, nil)
-	//	rw := httptest.NewRecorder()
-	//	req, _ := http.NewRequest(http.MethodPatch, "/debit", strings.NewReader(string(bodyJSON)))
-	//
-	//	route.ServeHTTP(rw, req)
-	//	assert.Equal(t, http.StatusOK, rw.Code)
-	//	assert.NotContains(t, rw.Body.String(), transaction)
-	//})
-	//
 
 }
