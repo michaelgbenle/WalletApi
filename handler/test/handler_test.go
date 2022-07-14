@@ -160,7 +160,7 @@ func TestDebitWallet(t *testing.T) {
 	}
 	bodyJSON, _ := json.Marshal(transaction)
 
-	t.Run("Testing for bad request", func(t *testing.T) {
+	t.Run("Testing for success", func(t *testing.T) {
 		mockDB.EXPECT().Getcustomer(debit.AccountNos).Return(customer, nil)
 		w := httptest.NewRecorder()
 		req, _ := http.NewRequest("PATCH", "/debit", strings.NewReader(string(bodyJSON)))

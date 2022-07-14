@@ -69,7 +69,7 @@ func (h *Handler) DebitWallet(c *gin.Context) {
 			Success:    false,
 		}
 		h.DB.CreateTransaction(transaction)
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "insufficient funds"})
+		c.IndentedJSON(http.StatusBadRequest, gin.H{"error": "insufficient funds"})
 		return
 	}
 
