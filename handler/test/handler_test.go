@@ -139,12 +139,25 @@ func TestDebitWallet(t *testing.T) {
 	h := handler.Handler{DB: mockDB}
 	route, _ := router.SetupRouter(&h)
 
+	customer := models.Customer{
+		Model:      gorm.Model{ID: 1, CreatedAt: time.Time{}, UpdatedAt: time.Time{}, DeletedAt: gorm.DeletedAt{}},
+		Name:       "Rose",
+		AccountNos: "1187654311",
+		Balance:    3000,
+	}
 	debit := &models.Money{
 		AccountNos: "1187654311",
 		Amount:     0,
 	}
 
 	transaction := models.Transaction{
+		Model: gorm.Model{
+			ID:        1,
+			CreatedAt: time.Time{},
+			UpdatedAt: time.Time{},
+			DeletedAt: gorm.DeletedAt{},
+		},
+		CustomerId: customer.ID,
 		AccountNos: debit.AccountNos,
 		Type:       "debit",
 		Success:    true,
@@ -154,7 +167,7 @@ func TestDebitWallet(t *testing.T) {
 		t.Fail()
 	}
 	t.Run("Testing for bad request", func(t *testing.T) {
-		mockDB.EXPECT().Getcustomer(debit.AccountNos).Return(nil, nil)
+		mockDB.EXPECT().Getcustomer(debit.AccountNos).Return(customer, nil)
 		w := httptest.NewRecorder()
 		req, _ := http.NewRequest("PATCH", "/debit", strings.NewReader(string(bodyJSON)))
 		route.ServeHTTP(w, req)
