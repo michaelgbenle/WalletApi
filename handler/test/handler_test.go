@@ -33,7 +33,8 @@ func TestGetCustomer(t *testing.T) {
 	if err != nil {
 		t.Fail()
 	}
-	t.Run("Testing for get customer", func(t *testing.T) {
+
+	t.Run("Testing for error", func(t *testing.T) {
 		mockDB.EXPECT().Getcustomer(accountNos).Return(nil, errors.New("errors exist"))
 		rw := httptest.NewRecorder()
 		req, _ := http.NewRequest(http.MethodGet, "/customer?accountNos=1187654311", strings.NewReader(string(bodyJSON)))
@@ -43,6 +44,7 @@ func TestGetCustomer(t *testing.T) {
 		assert.Equal(t, rw.Code, 400)
 
 	})
+
 	t.Run("Testing for get customer", func(t *testing.T) {
 		mockDB.EXPECT().Getcustomer(accountNos).Return(&customer, nil)
 
