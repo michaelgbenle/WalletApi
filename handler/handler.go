@@ -66,14 +66,7 @@ func (h *Handler) DebitWallet(c *gin.Context) {
 		return
 	}
 
-	if customer.Balance < debit.Amount {
-		transaction := &models.Transaction{
-			CustomerId: customer.ID,
-			AccountNos: customer.AccountNos,
-			Type:       "debit",
-			Success:    false,
-		}
-		h.DB.CreateTransaction(transaction)
+	if h.DB.InsufficientFunds(customer, debit) {
 		c.IndentedJSON(http.StatusBadRequest, gin.H{"error": "insufficient funds"})
 		return
 	}

@@ -75,9 +75,18 @@ func (pdb *PostgresDb) CreateTransaction(transaction *models.Transaction) {
 	pdb.DB.Create(&transaction)
 }
 
-func (pdb *PostgresDb) InsufficientFunds(customer models.Customer, debit models.Money) error {
-
-	return nil
+func (pdb *PostgresDb) InsufficientFunds(customer *models.Customer, debit *models.Money) bool {
+	if customer.Balance < debit.Amount {
+		transaction := &models.Transaction{
+			CustomerId: customer.ID,
+			AccountNos: customer.AccountNos,
+			Type:       "debit",
+			Success:    false,
+		}
+		pdb.CreateTransaction(transaction)
+		return true
+	}
+	return false
 }
 
 //Debitwallet debits a customer's account with amount provided
