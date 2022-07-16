@@ -75,7 +75,7 @@ func (pdb *PostgresDb) CreateTransaction(transaction *models.Transaction) {
 	pdb.DB.Create(&transaction)
 }
 
-func (pdb *PostgresDb) InsufficientFunds() error {
+func (pdb *PostgresDb) InsufficientFunds(customer models.Customer, debit models.Money) error {
 
 	return nil
 }
