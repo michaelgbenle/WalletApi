@@ -81,7 +81,6 @@ func (h *Handler) DebitWallet(c *gin.Context) {
 		"message":     "wallet debited successfully",
 		"transaction": transaction,
 	})
-
 }
 func (h *Handler) GetTransaction(c *gin.Context) {
 	accountNos := c.Query("accountNos")
