@@ -123,15 +123,25 @@ func TestCreditWallet(t *testing.T) {
 	if err != nil {
 		t.Fail()
 	}
+	t.Run("Testing for error", func(t *testing.T) {
+		mockDB.EXPECT().Creditwallet(credit).Return(nil, errors.New("errors exist"))
+		rw := httptest.NewRecorder()
+		req, _ := http.NewRequest(http.MethodPatch, "/credit", strings.NewReader(string(bodyJSON)))
 
-	mockDB.EXPECT().Creditwallet(credit).Return(&transaction, nil)
-	rw := httptest.NewRecorder()
-	req, _ := http.NewRequest(http.MethodPatch, "/credit", strings.NewReader(string(bodyJSON)))
+		route.ServeHTTP(rw, req)
+		assert.Equal(t, http.StatusInternalServerError, rw.Code)
+		assert.Contains(t, rw.Body.String(), "unable to credit wallet")
+	})
 
-	route.ServeHTTP(rw, req)
-	assert.Equal(t, http.StatusOK, rw.Code)
-	assert.Contains(t, rw.Body.String(), string(bodyJSON))
+	t.Run("Testing for success", func(t *testing.T) {
+		mockDB.EXPECT().Creditwallet(credit).Return(&transaction, nil)
+		rw := httptest.NewRecorder()
+		req, _ := http.NewRequest(http.MethodPatch, "/credit", strings.NewReader(string(bodyJSON)))
 
+		route.ServeHTTP(rw, req)
+		assert.Equal(t, http.StatusOK, rw.Code)
+		assert.Contains(t, rw.Body.String(), string(bodyJSON))
+	})
 }
 
 func TestDebitWallet(t *testing.T) {
@@ -170,6 +180,18 @@ func TestDebitWallet(t *testing.T) {
 	}
 	bodyJSON, _ := json.Marshal(transaction1)
 
+	t.Run("Testing for error", func(t *testing.T) {
+		mockDB.EXPECT().Getcustomer(debit.AccountNos).Return(&customer, nil)
+		mockDB.EXPECT().CreateTransaction(transaction).AnyTimes()
+		mockDB.EXPECT().Debitwallet(debit).Return(nil, errors.New("unable to debit wallet"))
+		w := httptest.NewRecorder()
+		req, _ := http.NewRequest("PATCH", "/debit", strings.NewReader(string(bodyJSON)))
+		route.ServeHTTP(w, req)
+
+		assert.Equal(t, http.StatusInternalServerError, w.Code)
+		assert.Contains(t, w.Body.String(), "unable to debit wallet")
+	})
+
 	t.Run("Testing for success", func(t *testing.T) {
 		mockDB.EXPECT().Getcustomer(debit.AccountNos).Return(&customer, nil)
 		mockDB.EXPECT().CreateTransaction(transaction).AnyTimes()
@@ -182,4 +204,46 @@ func TestDebitWallet(t *testing.T) {
 		assert.Contains(t, w.Body.String(), string(bodyJSON))
 	})
 
+}
+
+func TestAddCustomer(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+	mockDB := mockdatabase.NewMockDB(ctrl)
+	h := handler.Handler{DB: mockDB}
+	route, _ := router.SetupRouter(&h)
+
+	customer := models.Customer{
+		Model: gorm.Model{
+			ID: 1, CreatedAt: time.Time{}, UpdatedAt: time.Time{}, DeletedAt: gorm.DeletedAt{}},
+		Name:       "Bella",
+		AccountNos: "1187654311",
+		Balance:    0,
+	}
+	bodyJSON, err := json.Marshal(&customer)
+	if err != nil {
+		t.Fail()
+	}
+
+	t.Run("Testing for add customer", func(t *testing.T) {
+		//mockDB.EXPECT().Getcustomer(customer.AccountNos).Return(&customer, err)
+		mockDB.EXPECT().Addcustomer(&customer).Return(nil)
+		w := httptest.NewRecorder()
+		req, _ := http.NewRequest(http.MethodPost, "/addcustomer", strings.NewReader(string(bodyJSON)))
+		route.ServeHTTP(w, req)
+		assert.Equal(t, http.StatusInternalServerError, w.Code)
+		assert.Contains(t, w.Body.String(), "unable to bind json")
+
+	})
+
+	//t.Run("Testing for add customer", func(t *testing.T) {
+	//	mockDB.EXPECT().Getcustomer(customer.AccountNos).Return(&customer, nil).AnyTimes()
+	//	//mockDB.EXPECT().Addcustomer(&customer).Return(nil)
+	//	w := httptest.NewRecorder()
+	//	req, _ := http.NewRequest(http.MethodPost, "/addcustomer", strings.NewReader(string(bodyJSON)))
+	//	route.ServeHTTP(w, req)
+	//	assert.Equal(t, http.StatusInternalServerError, w.Code)
+	//	assert.Contains(t, w.Body.String(), "unable to bind json")
+	//
+	//})
 }

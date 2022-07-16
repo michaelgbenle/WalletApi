@@ -60,7 +60,12 @@ func (h *Handler) DebitWallet(c *gin.Context) {
 		return
 	}
 
-	customer, _ := h.DB.Getcustomer(debit.AccountNos)
+	customer, err := h.DB.Getcustomer(debit.AccountNos)
+	if err != nil {
+		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": "unable to get customer"})
+		return
+	}
+
 	if customer.Balance < debit.Amount {
 		transaction := &models.Transaction{
 			CustomerId: customer.ID,

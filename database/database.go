@@ -5,6 +5,7 @@ import (
 	"github.com/michaelgbenle/WalletApi/models"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 	"log"
 	"sync"
 )
@@ -74,6 +75,11 @@ func (pdb *PostgresDb) CreateTransaction(transaction *models.Transaction) {
 	pdb.DB.Create(&transaction)
 }
 
+func (pdb *PostgresDb) InsufficientFunds() error {
+
+	return nil
+}
+
 //Debitwallet debits a customer's account with amount provided
 func (pdb *PostgresDb) Debitwallet(money *models.Money) (*models.Transaction, error) {
 
@@ -88,17 +94,11 @@ func (pdb *PostgresDb) Debitwallet(money *models.Money) (*models.Transaction, er
 	if err := pdb.DB.Create(&transaction).Error; err != nil {
 		return nil, err
 	}
-	//if user.Balance < amount {
-	//	return nil, errors.New("insufficient funds")
-	//}
 
-	mu.Lock()
-	if err := pdb.DB.Model(user).Where("account_nos=?", accountNos).
-		Update("balance", user.Balance-amount).
-		Error; err != nil {
+	if err := pdb.DB.Clauses(clause.Locking{Strength: "UPDATE"}).Model(user).Where("account_nos=?", accountNos).
+		Update("balance", user.Balance-amount).Error; err != nil {
 		return nil, err
 	}
-	mu.Unlock()
 
 	if err := pdb.DB.Model(transaction).Where("Customer_id=?", user.ID).
 		Update("success", true).
