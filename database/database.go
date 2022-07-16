@@ -75,6 +75,7 @@ func (pdb *PostgresDb) CreateTransaction(transaction *models.Transaction) {
 	pdb.DB.Create(&transaction)
 }
 
+//InsufficientFunds checks for insufficient funds
 func (pdb *PostgresDb) InsufficientFunds(customer *models.Customer, debit *models.Money) bool {
 	if customer.Balance < debit.Amount {
 		transaction := &models.Transaction{
