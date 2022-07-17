@@ -175,7 +175,8 @@ func TestDebitWallet(t *testing.T) {
 	t.Run("Testing for error", func(t *testing.T) {
 		mockDB.EXPECT().Getcustomer(debit.AccountNos).Return(&customer, nil)
 		mockDB.EXPECT().InsufficientFunds(&customer, debit).Return(true)
-		mockDB.EXPECT().Debitwallet(debit).Return(nil, errors.New("insufficient funds"))
+		//mockDB.EXPECT().Debitwallet(debit).Return(&transaction1, nil)
+		//mockDB.EXPECT().Debitwallet(debit).Return(nil, errors.New("insufficient funds"))
 		w := httptest.NewRecorder()
 		req, _ := http.NewRequest("PATCH", "/debit", strings.NewReader(string(bodyJSON)))
 		route.ServeHTTP(w, req)
