@@ -100,7 +100,7 @@ func (h *Handler) AddCustomer(c *gin.Context) {
 	var customer *models.Customer
 	err := c.ShouldBindJSON(&customer)
 	if err != nil {
-		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": "unable to bind json"})
+		c.IndentedJSON(http.StatusBadRequest, gin.H{"error": "unable to bind json"})
 		return
 	}
 
