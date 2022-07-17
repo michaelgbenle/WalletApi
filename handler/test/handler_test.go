@@ -159,7 +159,7 @@ func TestDebitWallet(t *testing.T) {
 	}
 	debit := &models.Money{
 		AccountNos: "1187654311",
-		Amount:     1100,
+		Amount:     500,
 	}
 
 	//transaction := &models.Transaction{
