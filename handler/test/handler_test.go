@@ -176,7 +176,7 @@ func TestDebitWallet(t *testing.T) {
 		CustomerId: customer.ID,
 		AccountNos: debit.AccountNos,
 		Type:       "debit",
-		Success:    true,
+		Success:    false,
 	}
 	bodyJSON, _ := json.Marshal(transaction1)
 
