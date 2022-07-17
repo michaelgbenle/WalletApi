@@ -162,14 +162,6 @@ func TestDebitWallet(t *testing.T) {
 		Amount:     0,
 	}
 
-	//transaction := &models.Transaction{
-	//	Model: gorm.Model{
-	//		ID: 1, CreatedAt: time.Time{}, UpdatedAt: time.Time{}, DeletedAt: gorm.DeletedAt{}},
-	//	CustomerId: customer.ID,
-	//	AccountNos: debit.AccountNos,
-	//	Type:       "debit",
-	//	Success:    false,
-	//}
 	transaction1 := models.Transaction{
 		Model: gorm.Model{
 			ID: 1, CreatedAt: time.Time{}, UpdatedAt: time.Time{}, DeletedAt: gorm.DeletedAt{}},
