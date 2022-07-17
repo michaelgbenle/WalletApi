@@ -159,7 +159,7 @@ func TestDebitWallet(t *testing.T) {
 	}
 	debit := &models.Money{
 		AccountNos: "1187654311",
-		Amount:     500,
+		Amount:     1100,
 	}
 
 	//transaction := &models.Transaction{
@@ -174,7 +174,7 @@ func TestDebitWallet(t *testing.T) {
 		Model: gorm.Model{
 			ID: 1, CreatedAt: time.Time{}, UpdatedAt: time.Time{}, DeletedAt: gorm.DeletedAt{}},
 		CustomerId: customer.ID,
-		AccountNos: debit.AccountNos,
+		AccountNos: customer.AccountNos,
 		Type:       "debit",
 		Success:    false,
 	}
@@ -183,13 +183,13 @@ func TestDebitWallet(t *testing.T) {
 	t.Run("Testing for error", func(t *testing.T) {
 		mockDB.EXPECT().Getcustomer(debit.AccountNos).Return(&customer, nil)
 		mockDB.EXPECT().InsufficientFunds(&customer, debit).Return(true)
-		mockDB.EXPECT().Debitwallet(debit).Return(nil, errors.New("unable to debit wallet"))
+		mockDB.EXPECT().Debitwallet(debit).Return(nil, errors.New("insufficient funds"))
 		w := httptest.NewRecorder()
 		req, _ := http.NewRequest("PATCH", "/debit", strings.NewReader(string(bodyJSON)))
 		route.ServeHTTP(w, req)
 
 		assert.Equal(t, http.StatusInternalServerError, w.Code)
-		assert.Contains(t, w.Body.String(), "unable to debit wallet")
+		assert.Contains(t, w.Body.String(), "insufficient funds")
 	})
 
 	t.Run("Testing for success", func(t *testing.T) {
