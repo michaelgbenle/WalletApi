@@ -155,21 +155,21 @@ func TestDebitWallet(t *testing.T) {
 		Model:      gorm.Model{ID: 1, CreatedAt: time.Time{}, UpdatedAt: time.Time{}, DeletedAt: gorm.DeletedAt{}},
 		Name:       "Rose",
 		AccountNos: "1187654311",
-		Balance:    3000,
+		Balance:    500,
 	}
 	debit := &models.Money{
 		AccountNos: "1187654311",
-		Amount:     0,
+		Amount:     500,
 	}
 
-	transaction := &models.Transaction{
-		Model: gorm.Model{
-			ID: 1, CreatedAt: time.Time{}, UpdatedAt: time.Time{}, DeletedAt: gorm.DeletedAt{}},
-		CustomerId: customer.ID,
-		AccountNos: debit.AccountNos,
-		Type:       "debit",
-		Success:    false,
-	}
+	//transaction := &models.Transaction{
+	//	Model: gorm.Model{
+	//		ID: 1, CreatedAt: time.Time{}, UpdatedAt: time.Time{}, DeletedAt: gorm.DeletedAt{}},
+	//	CustomerId: customer.ID,
+	//	AccountNos: debit.AccountNos,
+	//	Type:       "debit",
+	//	Success:    false,
+	//}
 	transaction1 := models.Transaction{
 		Model: gorm.Model{
 			ID: 1, CreatedAt: time.Time{}, UpdatedAt: time.Time{}, DeletedAt: gorm.DeletedAt{}},
@@ -182,7 +182,7 @@ func TestDebitWallet(t *testing.T) {
 
 	t.Run("Testing for error", func(t *testing.T) {
 		mockDB.EXPECT().Getcustomer(debit.AccountNos).Return(&customer, nil)
-		mockDB.EXPECT().CreateTransaction(transaction).AnyTimes()
+		mockDB.EXPECT().InsufficientFunds(&customer, debit).Return(true)
 		mockDB.EXPECT().Debitwallet(debit).Return(nil, errors.New("unable to debit wallet"))
 		w := httptest.NewRecorder()
 		req, _ := http.NewRequest("PATCH", "/debit", strings.NewReader(string(bodyJSON)))
@@ -194,7 +194,7 @@ func TestDebitWallet(t *testing.T) {
 
 	t.Run("Testing for success", func(t *testing.T) {
 		mockDB.EXPECT().Getcustomer(debit.AccountNos).Return(&customer, nil)
-		mockDB.EXPECT().CreateTransaction(transaction).AnyTimes()
+		mockDB.EXPECT().InsufficientFunds(&customer, debit).Return(false)
 		mockDB.EXPECT().Debitwallet(debit).Return(&transaction1, nil)
 		w := httptest.NewRecorder()
 		req, _ := http.NewRequest("PATCH", "/debit", strings.NewReader(string(bodyJSON)))
