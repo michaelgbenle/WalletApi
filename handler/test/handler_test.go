@@ -227,7 +227,7 @@ func TestAddCustomer(t *testing.T) {
 		assert.Contains(t, w.Body.String(), "unable to bind json")
 
 	})
-	t.Run("Testing for add customer", func(t *testing.T) {
+	t.Run("Testing for success", func(t *testing.T) {
 		//mockDB.EXPECT().Getcustomer(customer.AccountNos).Return(nil, err)
 		//mockDB.EXPECT().Addcustomer(&customer).Return(nil)
 		w := httptest.NewRecorder()
