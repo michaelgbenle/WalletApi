@@ -226,8 +226,8 @@ func TestAddCustomer(t *testing.T) {
 
 	})
 	t.Run("Testing for success", func(t *testing.T) {
-		//mockDB.EXPECT().Getcustomer(customer.AccountNos).Return(nil, err)
-		//mockDB.EXPECT().Addcustomer(&customer).Return(nil)
+		mockDB.EXPECT().Getcustomer(customer.AccountNos).Return(nil, err)
+		mockDB.EXPECT().Addcustomer(&customer).Return(nil)
 		w := httptest.NewRecorder()
 		req, _ := http.NewRequest(http.MethodPost, "/addcustomer", strings.NewReader(string(bodyJSON)))
 		route.ServeHTTP(w, req)
