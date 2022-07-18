@@ -175,8 +175,7 @@ func TestDebitWallet(t *testing.T) {
 	t.Run("Testing for error", func(t *testing.T) {
 		mockDB.EXPECT().Getcustomer(debit.AccountNos).Return(&customer, nil)
 		mockDB.EXPECT().InsufficientFunds(&customer, debit).Return(true)
-		//mockDB.EXPECT().Debitwallet(debit).Return(&transaction1, nil)
-		//mockDB.EXPECT().Debitwallet(debit).Return(nil, errors.New("insufficient funds"))
+
 		w := httptest.NewRecorder()
 		req, _ := http.NewRequest("PATCH", "/debit", strings.NewReader(string(bodyJSON)))
 		route.ServeHTTP(w, req)
@@ -220,11 +219,11 @@ func TestAddCustomer(t *testing.T) {
 
 	t.Run("Testing for add customer", func(t *testing.T) {
 		mockDB.EXPECT().Getcustomer(customer.AccountNos).Return(&customer, err)
-		//mockDB.EXPECT().Addcustomer(&customer).Return(nil)
+		mockDB.EXPECT().Addcustomer(&customer).Return(errors.New("customer exists"))
 		w := httptest.NewRecorder()
 		req, _ := http.NewRequest(http.MethodPost, "/addcustomer", strings.NewReader(string(bodyJSON)))
 		route.ServeHTTP(w, req)
-		assert.Equal(t, http.StatusInternalServerError, w.Code)
+		assert.Equal(t, http.StatusBadRequest, w.Code)
 		assert.Contains(t, w.Body.String(), "unable to bind json")
 
 	})
