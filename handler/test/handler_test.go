@@ -205,7 +205,7 @@ func TestAddCustomer(t *testing.T) {
 	h := handler.Handler{DB: mockDB}
 	route, _ := router.SetupRouter(&h)
 
-	customer := models.Customer{
+	customer := &models.Customer{
 		Model: gorm.Model{
 			ID: 1, CreatedAt: time.Time{}, UpdatedAt: time.Time{}, DeletedAt: gorm.DeletedAt{}},
 		Name:       "Bella",
@@ -223,7 +223,7 @@ func TestAddCustomer(t *testing.T) {
 		w := httptest.NewRecorder()
 		req, _ := http.NewRequest(http.MethodPost, "/addcustomer", strings.NewReader(string(bodyJSON)))
 		route.ServeHTTP(w, req)
-		assert.Equal(t, http.StatusBadRequest, w.Code)
+		assert.Equal(t, 400, w.Code)
 		assert.Contains(t, w.Body.String(), "unable to bind json")
 
 	})
