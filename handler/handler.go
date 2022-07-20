@@ -85,7 +85,7 @@ func (h *Handler) DebitWallet(c *gin.Context) {
 }
 func (h *Handler) GetTransaction(c *gin.Context) {
 	accountNos := c.Query("accountNos")
-	if !services.ValidateAccountNumber(credit.AccountNos) {
+	if !services.ValidateAccountNumber(accountNos) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "account number should be 10 digits"})
 		return
 	}
