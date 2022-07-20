@@ -18,10 +18,6 @@ func (h *Handler) GetCustomer(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "account number should be 10 digits"})
 		return
 	}
-	if len(accountNos) != 10 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "account number should be 10 digits"})
-		return
-	}
 	customer, err := h.DB.Getcustomer(accountNos)
 	if err != nil {
 		c.IndentedJSON(http.StatusBadRequest, gin.H{
