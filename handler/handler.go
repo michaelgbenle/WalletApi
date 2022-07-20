@@ -14,6 +14,10 @@ type Handler struct {
 
 func (h *Handler) GetCustomer(c *gin.Context) {
 	accountNos := c.Query("accountNos")
+	if !services.ValidateAccountNumber(credit.AccountNos) {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "account number should be 10 digits"})
+		return
+	}
 	if len(accountNos) != 10 {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "account number should be 10 digits"})
 		return
