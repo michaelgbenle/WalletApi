@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/michaelgbenle/WalletApi/database"
 	"github.com/michaelgbenle/WalletApi/models"
+	"github.com/michaelgbenle/WalletApi/services"
 	"net/http"
 )
 
@@ -36,9 +37,12 @@ func (h *Handler) CreditWallet(c *gin.Context) {
 		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": "unable to bind json"})
 		return
 	}
-	if len(credit.AccountNos) != 10 {
+	if services.ValidateAccountNumber(credit.AccountNos) == false {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "account number should be 10 digits"})
 		return
+	}
+	if len(credit.AccountNos) != 10 {
+
 	}
 
 	transaction, CreditErr := h.DB.Creditwallet(credit)
