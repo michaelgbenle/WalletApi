@@ -15,7 +15,7 @@ type Handler struct {
 func (h *Handler) GetCustomer(c *gin.Context) {
 	accountNos := c.Query("accountNos")
 	if !services.ValidateAccountNumber(accountNos) {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "account number should be 10 digits"})
+		c.IndentedJSON(http.StatusBadRequest, gin.H{"error": "account number should be 10 digits"})
 		return
 	}
 	customer, err := h.DB.Getcustomer(accountNos)
