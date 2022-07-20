@@ -89,6 +89,7 @@ func (h *Handler) GetTransaction(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "account number should be 10 digits"})
 		return
 	}
+
 	transactions, err := h.DB.Gettransaction(accountNos)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
